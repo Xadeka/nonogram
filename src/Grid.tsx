@@ -33,7 +33,13 @@ export const Grid: FunctionComponent<GridProps> = ({ rows }) => {
           // TODO: Investigate a better key for rows and cells.
           <tr key={rowIndex} className="nonogram-grid-row">
             {row.map((cellValue, cellIndex) => (
-              <td key={cellIndex} className="nonogram-grid-cell">
+              <td
+                key={cellIndex}
+                className="nonogram-grid-cell"
+                // Using a data attribute for the state
+                // This allows us to style the cell accordingly in CSS.
+                data-state={cellValue}
+              >
                 {/* Display the cell state but only for screen readers. */}
                 <span className="sr-only">{cellValue}</span>
               </td>

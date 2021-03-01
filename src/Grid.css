@@ -19,4 +19,9 @@
   .nonogram-grid-cell {
     @apply h-5 w-5 text-sm rounded border border-green-500;
   }
+
+  /* `data-state` will contain the cell's state. This can be "empty" or "filled". */
+  .nonogram-grid-cell[data-state="filled"] {
+    @apply bg-green-300;
+  }
 }
