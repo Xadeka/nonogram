@@ -1,5 +1,15 @@
+import { Grid } from "./Grid";
+
 function App() {
-  return null;
+  return (
+    <Grid
+      rows={[
+        ["empty", "filled", "empty"],
+        ["empty", "empty", "filled"],
+        ["filled", "filled", "filled"],
+      ]}
+    />
+  );
 }
 
 export default App;
