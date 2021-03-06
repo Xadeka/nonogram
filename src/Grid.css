@@ -1,27 +1,7 @@
 @layer components {
-  /* The puzzle's grid. */
-  .nonogram-grid {
-    /* Default grid height and width.
-     * These will be set on the element's style to override.
-     */
-    --nonogram-grid-rows: 1;
-    --nonogram-grid-columns: 1;
-
-    @apply inline-grid gap-1;
-    grid-template-rows: repeat(var(--nonogram-grid-rows), auto);
-  }
-
-  .nonogram-grid-row {
-    @apply inline-grid gap-1;
-    grid-template-columns: repeat(var(--nonogram-grid-columns), auto);
-  }
-
-  .nonogram-grid-cell {
-    @apply h-5 w-5 text-sm rounded border border-green-500;
-  }
-
-  /* `data-state` will contain the cell's state. This can be "empty" or "filled". */
-  .nonogram-grid-cell[data-state="filled"] {
+  /* The `aria-pressed` attribute with value `true` will represent a filled cell. */
+  /* Is there a way we could do this in the component itself? */
+  .nonogram-grid button[aria-pressed="true"] {
     @apply bg-green-300;
   }
 }

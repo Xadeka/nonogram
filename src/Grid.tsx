@@ -1,4 +1,3 @@
-import { FunctionComponent } from "react";
 import "./Grid.css";
 
 type GridProps = {
@@ -10,43 +9,37 @@ type GridProps = {
   rows: string[][];
 };
 
-export const Grid: FunctionComponent<GridProps> = ({ rows }) => {
-  const rowCount = rows.length;
-  // Our column count is dictated by the largest row.
-  // This creates an array of the rows' length values, then finds the maximum.
-  const columnCount = Math.max(...rows.map((row) => row.length));
-
+export const Grid = ({ rows }: GridProps) => {
   return (
-    <table
-      role="grid"
-      className="nonogram-grid"
-      style={{
-        // Set CSS variables for a dynamically sized grid.
-        ["--nonogram-grid-rows" as any]: rowCount,
-        ["--nonogram-grid-columns" as any]: columnCount,
-        // Note: Casting the variable keys as any to avoid type error on React.CSSProperties.
-        // https://github.com/frenic/csstype#what-should-i-do-when-i-get-type-errors
-      }}
-    >
-      {rows.map((row, rowIndex) => {
-        return (
-          // TODO: Investigate a better key for rows and cells.
-          <tr key={rowIndex} className="nonogram-grid-row">
-            {row.map((cellValue, cellIndex) => (
-              <td
-                key={cellIndex}
-                className="nonogram-grid-cell"
-                // Using a data attribute for the state
-                // This allows us to style the cell accordingly in CSS.
-                data-state={cellValue}
-              >
-                {/* Display the cell state but only for screen readers. */}
-                <span className="sr-only">{cellValue}</span>
-              </td>
-            ))}
-          </tr>
-        );
-      })}
+    <table role="grid" className="nonogram-grid">
+      <tbody>
+        {rows.map((row, rowIndex) => {
+          return (
+            // TODO: Investigate a better key for rows and cells.
+            <tr key={rowIndex} role="row">
+              {row.map((cellValue, columnIndex) => (
+                <td key={columnIndex} role="gridcell" style={{ lineHeight: 0 }}>
+                  <button
+                    className="rounded border border-green-500 h-5 w-5 p-0"
+                    // The button pressed state will represent "filled".
+                    // Since we will be controlling these values in state,
+                    //   we will set the aria attribute ourselves.
+                    aria-pressed={cellValue === "filled"}
+                  >
+                    {/*
+                     * This is the accessible name for the button.
+                     * Using the button's content instead of aria-label.
+                     * If there isn't CSS on the page, we will still have labels on the buttons.
+                     * https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/button_role#basic_buttons
+                     */}
+                    <span className="sr-only">{`${columnIndex}:${rowIndex}`}</span>
+                  </button>
+                </td>
+              ))}
+            </tr>
+          );
+        })}
+      </tbody>
     </table>
   );
 };
