@@ -7,9 +7,13 @@ type GridProps = {
    * TODO: Add type for accepted cell values. At the moment, this is either "filled" or "empty".
    */
   rows: string[][];
+  onCellChange: (
+    position: { column: number; row: number },
+    value: string
+  ) => void;
 };
 
-export const Grid = ({ rows }: GridProps) => {
+export const Grid = ({ rows, onCellChange }: GridProps) => {
   return (
     <table role="grid" className="nonogram-grid">
       <tbody>
@@ -25,6 +29,20 @@ export const Grid = ({ rows }: GridProps) => {
                     // Since we will be controlling these values in state,
                     //   we will set the aria attribute ourselves.
                     aria-pressed={cellValue === "filled"}
+                    onClick={(e) => {
+                      let nextValue = "empty";
+
+                      if (cellValue === "filled") {
+                        nextValue = "empty";
+                      } else if (cellValue === "empty") {
+                        nextValue = "filled";
+                      }
+
+                      onCellChange(
+                        { column: columnIndex, row: rowIndex },
+                        nextValue
+                      );
+                    }}
                   >
                     {/*
                      * This is the accessible name for the button.
