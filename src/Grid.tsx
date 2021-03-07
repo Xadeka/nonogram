@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import "./Grid.css";
 
 type GridProps = {
@@ -13,142 +14,137 @@ type GridProps = {
   ) => void;
 };
 
+/**
+ * An object containing 0-indexed `column` and `row` values.
+ */
+type GridPosition = {
+  column: number;
+  row: number;
+};
+
+const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
+
 export const Grid = ({ rows, onCellChange }: GridProps) => {
-  let handleKeyDown = (e: React.KeyboardEvent<HTMLTableCellElement>) => {
-    if (e.code === "ArrowUp") {
-      // Get the previous row.
-      // First try the next sibling relative to the current row.
-      let currentRow = e.currentTarget.parentElement;
-      let nextRow = currentRow?.previousElementSibling;
+  const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
+    // Initial focus will be the first (top left) cell.
+    column: 0,
+    row: 0,
+  });
 
-      // If we don't have a row, we have reached the top of the grid.
-      // Wrap around to the bottom.
-      if (!nextRow) {
-        // Get the parent with all the rows.
-        let tbodyParent = currentRow?.parentElement;
-        // Set the next row to the first row.
-        nextRow = tbodyParent?.lastElementChild;
-      }
+  // When active cell changes:
+  // - Update the roving tab index. Next cell gets 1; Previous cell gets -1.
+  // - Change focus to the next cell.
+  // Reference: https://www.w3.org/TR/wai-aria-practices/#kbd_roving_tabindex
+  useEffect(() => {
+    let elementReceivingFocus = document.getElementById(
+      getCellId(focusedPosition)
+    );
 
-      // Get the next cell.
-      // Get the cellIndex of the current cell. It will be the same as the one in the next row.
-      let currentIndex = e.currentTarget.cellIndex;
-
-      let nextCell = nextRow?.children[currentIndex];
-
-      // If there is a next cell, then we'll focus within it.
-      if (nextCell) {
-        // Move roving tabindex to next cell.
-        e.currentTarget.tabIndex = -1;
-        (nextCell as HTMLElement).tabIndex = 0;
-
-        // Focus the first element.
-        (nextCell.firstElementChild as HTMLElement)?.focus();
-      }
-    } else if (e.code === "ArrowDown") {
-      // Get the next row.
-      // First try the next sibling relative to the current row.
-      let currentRow = e.currentTarget.parentElement;
-      let nextRow = currentRow?.nextElementSibling;
-
-      // If we don't have a row, we have reached the bottom of the grid.
-      // Wrap around to the top.
-      if (!nextRow) {
-        // Get the parent with all the rows.
-        let tbodyParent = currentRow?.parentElement;
-        // Set the next row to the first row.
-        nextRow = tbodyParent?.firstElementChild;
-      }
-
-      // Get the next cell.
-      // Get the cellIndex of the current cell. It will be the same as the one in the next row.
-      let currentIndex = e.currentTarget.cellIndex;
-
-      let nextCell = nextRow?.children[currentIndex];
-
-      // If there is a next cell, then we'll focus within it.
-      if (nextCell) {
-        // Move roving tabindex to next cell.
-        e.currentTarget.tabIndex = -1;
-        (nextCell as HTMLElement).tabIndex = 0;
-
-        // Focus the first element.
-        (nextCell.firstElementChild as HTMLElement)?.focus();
-      }
-    } else if (e.code === "ArrowLeft") {
-      // Get the next cell.
-      let nextCell = e.currentTarget.previousElementSibling;
-
-      // If there isn't a nextCell, we reached the start of the row.
-      if (!nextCell) {
-        nextCell = e.currentTarget.parentElement?.lastElementChild ?? null;
-      }
-
-      // If there is a next cell, then we'll focus within it.
-      if (nextCell) {
-        // Move roving tabindex to next cell.
-        e.currentTarget.tabIndex = -1;
-        (nextCell as HTMLElement).tabIndex = 0;
-
-        // Focus the first element.
-        (nextCell.firstElementChild as HTMLElement)?.focus();
-      }
-    } else if (e.code === "ArrowRight") {
-      // Get the next cell.
-      let nextCell = e.currentTarget.nextElementSibling;
-
-      // If there isn't a nextCell, we reached the end of the row.
-      if (!nextCell) {
-        nextCell = e.currentTarget.parentElement?.firstElementChild ?? null;
-      }
-
-      // If there is a next cell, then we'll focus within it.
-      if (nextCell) {
-        // Move roving tabindex to next cell.
-        e.currentTarget.tabIndex = -1;
-        (nextCell as HTMLElement).tabIndex = 0;
-
-        // Focus the first element.
-        (nextCell.firstElementChild as HTMLElement)?.focus();
-      }
+    if (elementReceivingFocus !== null) {
+      elementReceivingFocus.tabIndex = 0;
+      elementReceivingFocus.focus();
     }
+
+    // During effect clean up, the last element receiving focus will lose focus.
+    // Creating new variable for clarity.
+    let elementLosingFocus = elementReceivingFocus;
+
+    return () => {
+      if (elementLosingFocus !== null) {
+        elementLosingFocus.tabIndex = -1;
+      }
+    };
+  }, [focusedPosition]);
+
+  // Calculate height and width for convience in handleCellKeyDown.
+  let height = rows.length;
+  let width = Math.max(...rows.map((row) => row.length));
+
+  // This handles keyboard input to move to the next cell.
+  // It will wrap around to the opposite side if we reached the end of the current row or column.
+  let handleNavigationKeyDown = (key: string) => {
+    // Move down or right
+    // This will wrap to the start if we reach the end.
+    const moveNext = (index: number, length: number) => {
+      if (index < length - 1) {
+        return index + 1;
+      } else {
+        return 0;
+      }
+    };
+
+    // Move up or left
+    // This will wrap to the end if we reach the start.
+    const movePrevious = (index: number, length: number) => {
+      if (index > 0) {
+        return index - 1;
+      } else {
+        return length - 1;
+      }
+    };
+
+    // Update column and row to their next value.
+    // Default to their current postiion.
+    let column = focusedPosition.column;
+    let row = focusedPosition.row;
+
+    switch (key) {
+      case "ArrowUp":
+        row = movePrevious(row, height);
+        break;
+      case "ArrowRight":
+        column = moveNext(column, width);
+        break;
+      case "ArrowDown":
+        row = moveNext(row, height);
+        break;
+      case "ArrowLeft":
+        column = movePrevious(column, width);
+        break;
+      default:
+        break;
+    }
+
+    setFocusedPosition({ column, row });
+  };
+
+  // This handles interaction with the cell/button.
+  // It will toggle between "empty" and "filled" at the moment.
+  let onCellClick = (currentValue: string) => {
+    let nextValue = "empty";
+
+    if (currentValue === "filled") {
+      nextValue = "empty";
+    } else if (currentValue === "empty") {
+      nextValue = "filled";
+    }
+
+    onCellChange(focusedPosition, nextValue);
   };
 
   return (
-    <table role="grid" className="nonogram-grid">
+    <table
+      role="grid"
+      className="nonogram-grid"
+      onKeyDown={(e) => handleNavigationKeyDown(e.key)}
+    >
       <tbody>
         {rows.map((row, rowIndex) => {
           return (
             // TODO: Investigate a better key for rows and cells.
             <tr key={rowIndex} role="row">
               {row.map((cellValue, columnIndex) => (
-                <td
-                  key={columnIndex}
-                  role="gridcell"
-                  style={{ lineHeight: 0 }}
-                  onKeyDown={handleKeyDown}
-                  tabIndex={-1}
-                >
+                <td key={columnIndex} role="gridcell" style={{ lineHeight: 0 }}>
                   <button
+                    id={getCellId({ column: columnIndex, row: rowIndex })}
                     className="rounded border border-green-500 h-5 w-5 p-0"
+                    onClick={(e) => onCellClick(cellValue)}
+                    // Default -1 and will be updated once this element has focus.
+                    tabIndex={-1}
                     // The button pressed state will represent "filled".
                     // Since we will be controlling these values in state,
                     //   we will set the aria attribute ourselves.
                     aria-pressed={cellValue === "filled"}
-                    onClick={(e) => {
-                      let nextValue = "empty";
-
-                      if (cellValue === "filled") {
-                        nextValue = "empty";
-                      } else if (cellValue === "empty") {
-                        nextValue = "filled";
-                      }
-
-                      onCellChange(
-                        { column: columnIndex, row: rowIndex },
-                        nextValue
-                      );
-                    }}
                   >
                     {/*
                      * This is the accessible name for the button.
