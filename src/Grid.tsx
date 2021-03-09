@@ -43,6 +43,7 @@ type GridPosition = {
 const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 
 export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
+  const [gridHasFocus, setGridHasFocus] = useState(false);
   const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
     // Initial focus will be the first (top left) cell.
     column: 0,
@@ -53,12 +54,17 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
 
   // When active cell changes, focus that element.
   useEffect(() => {
+    // Don't focus children if the component hasn't been focused first.
+    if (!gridHasFocus) {
+      return;
+    }
+
     let elementReceivingFocus = document.getElementById(focusedCellId);
 
     if (elementReceivingFocus !== null) {
       elementReceivingFocus.focus();
     }
-  }, [focusedCellId]);
+  }, [gridHasFocus, focusedCellId]);
 
   // This handles keyboard input to move to the next cell.
   // It will wrap around to the opposite side if we reached the end of the current row or column.
@@ -124,7 +130,12 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
     <table
       role="grid"
       className="nonogram-grid"
-      onKeyDown={(e) => handleNavigationKeyDown(e.key)}
+      // Prevent key interactions if the grid does not have focus.
+      onKeyDown={
+        gridHasFocus ? (e) => handleNavigationKeyDown(e.key) : undefined
+      }
+      onFocus={(e) => setGridHasFocus(true)}
+      onBlur={(e) => setGridHasFocus(false)}
     >
       <tbody>
         {[...Array(height)].map((_ignored, rowIndex) => {
