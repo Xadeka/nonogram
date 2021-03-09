@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Grid.css";
 
 /**
@@ -42,7 +42,13 @@ type GridPosition = {
 
 const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 
-export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
+function useGrid<T extends HTMLElement>({
+  height,
+  width,
+}: {
+  height: number;
+  width: number;
+}) {
   const [gridHasFocus, setGridHasFocus] = useState(false);
   const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
     // Initial focus will be the first (top left) cell.
@@ -114,6 +120,23 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
     setFocusedPosition({ column, row });
   };
 
+  return {
+    focusedCellId,
+    // Prevent key interactions if the grid does not have focus.
+    onKeyDown: gridHasFocus
+      ? (e: React.KeyboardEvent<T>) => handleNavigationKeyDown(e.key)
+      : undefined,
+    onFocus: (e: React.FocusEvent<T>) => setGridHasFocus(true),
+    onBlur: (e: React.FocusEvent<T>) => setGridHasFocus(false),
+  };
+}
+
+export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
+  const { focusedCellId, onKeyDown, onFocus, onBlur } = useGrid({
+    height,
+    width,
+  });
+
   // This handles interaction with the cell/button.
   // It will toggle between "empty" and "filled" at the moment.
   let onCellClick = (currentValue?: string) => {
@@ -130,12 +153,9 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
     <table
       role="grid"
       className="nonogram-grid"
-      // Prevent key interactions if the grid does not have focus.
-      onKeyDown={
-        gridHasFocus ? (e) => handleNavigationKeyDown(e.key) : undefined
-      }
-      onFocus={(e) => setGridHasFocus(true)}
-      onBlur={(e) => setGridHasFocus(false)}
+      onKeyDown={onKeyDown}
+      onFocus={onFocus}
+      onBlur={onBlur}
     >
       <tbody>
         {[...Array(height)].map((_ignored, rowIndex) => {
