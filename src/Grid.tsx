@@ -1,17 +1,35 @@
 import { useState, useEffect } from "react";
 import "./Grid.css";
 
+/**
+ * An object map of cell IDs and cell values.
+ */
+export type GridState = {
+  [cellId: string]: string | undefined;
+};
+
 type GridProps = {
   /**
-   * A 2D array that contains a representation of each cell's state.
-   *
-   * TODO: Add type for accepted cell values. At the moment, this is either "filled" or "empty".
+   * The height of the grid.
    */
-  rows: string[][];
-  onCellChange: (
-    position: { column: number; row: number },
-    value: string
-  ) => void;
+  height: number;
+  /**
+   * The width of the grid.
+   */
+  width: number;
+  // TODO: Should this state be managed here?
+  // Consider a `defaultState` if we need to initalize it.
+  // But maybe the component should handle state internally.
+  /**
+   * The current state of the grid.
+   */
+  state: GridState;
+  /**
+   * Handler for cell state changes.
+   * @param cellId The ID of the cell.
+   * @param value The value that the cell should change to.
+   */
+  onCellChange: (cellId: string, value?: string) => void;
 };
 
 /**
@@ -24,7 +42,7 @@ type GridPosition = {
 
 const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 
-export const Grid = ({ rows, onCellChange }: GridProps) => {
+export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
   const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
     // Initial focus will be the first (top left) cell.
     column: 0,
@@ -41,10 +59,6 @@ export const Grid = ({ rows, onCellChange }: GridProps) => {
       elementReceivingFocus.focus();
     }
   }, [focusedCellId]);
-
-  // Calculate height and width for convience in handleCellKeyDown.
-  let height = rows.length;
-  let width = Math.max(...rows.map((row) => row.length));
 
   // This handles keyboard input to move to the next cell.
   // It will wrap around to the opposite side if we reached the end of the current row or column.
@@ -96,16 +110,14 @@ export const Grid = ({ rows, onCellChange }: GridProps) => {
 
   // This handles interaction with the cell/button.
   // It will toggle between "empty" and "filled" at the moment.
-  let onCellClick = (currentValue: string) => {
-    let nextValue = "empty";
+  let onCellClick = (currentValue?: string) => {
+    let nextValue;
 
-    if (currentValue === "filled") {
-      nextValue = "empty";
-    } else if (currentValue === "empty") {
+    if (!currentValue) {
       nextValue = "filled";
     }
 
-    onCellChange(focusedPosition, nextValue);
+    onCellChange(focusedCellId, nextValue);
   };
 
   return (
@@ -115,15 +127,17 @@ export const Grid = ({ rows, onCellChange }: GridProps) => {
       onKeyDown={(e) => handleNavigationKeyDown(e.key)}
     >
       <tbody>
-        {rows.map((row, rowIndex) => {
+        {[...Array(height)].map((_ignored, rowIndex) => {
           return (
             // TODO: Investigate a better key for rows and cells.
             <tr key={rowIndex} role="row">
-              {row.map((cellValue, columnIndex) => {
+              {[...Array(width)].map((_ignored, columnIndex) => {
                 const cellId = getCellId({
                   column: columnIndex,
                   row: rowIndex,
                 });
+
+                const cellValue = state[cellId];
 
                 return (
                   <td
@@ -132,7 +146,7 @@ export const Grid = ({ rows, onCellChange }: GridProps) => {
                     style={{ lineHeight: 0 }}
                   >
                     <button
-                      id={getCellId({ column: columnIndex, row: rowIndex })}
+                      id={cellId}
                       className="rounded border border-green-500 h-5 w-5 p-0"
                       onClick={(e) => onCellClick(cellValue)}
                       // tabIndex is determined by what cell is currently focused.
