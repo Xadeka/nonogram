@@ -56,8 +56,6 @@ function useGrid<T extends HTMLElement>({
     row: 0,
   });
 
-  let focusedCellId = getCellId(focusedPosition);
-
   // When active cell changes, focus that element.
   useEffect(() => {
     // Don't focus children if the component hasn't been focused first.
@@ -65,12 +63,13 @@ function useGrid<T extends HTMLElement>({
       return;
     }
 
+    let focusedCellId = getCellId(focusedPosition);
     let elementReceivingFocus = document.getElementById(focusedCellId);
 
     if (elementReceivingFocus !== null) {
       elementReceivingFocus.focus();
     }
-  }, [gridHasFocus, focusedCellId]);
+  }, [gridHasFocus, focusedPosition]);
 
   // This handles keyboard input to move to the next cell.
   // It will wrap around to the opposite side if we reached the end of the current row or column.
@@ -121,7 +120,8 @@ function useGrid<T extends HTMLElement>({
   };
 
   return {
-    focusedCellId,
+    focusedPosition,
+    setFocusedPosition,
     // Prevent key interactions if the grid does not have focus.
     onKeyDown: gridHasFocus
       ? (e: React.KeyboardEvent<T>) => handleNavigationKeyDown(e.key)
@@ -132,22 +132,31 @@ function useGrid<T extends HTMLElement>({
 }
 
 export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
-  const { focusedCellId, onKeyDown, onFocus, onBlur } = useGrid({
+  const {
+    focusedPosition,
+    setFocusedPosition,
+    onKeyDown,
+    onFocus,
+    onBlur,
+  } = useGrid({
     height,
     width,
   });
 
   // This handles interaction with the cell/button.
   // It will toggle between "empty" and "filled" at the moment.
-  let onCellClick = (currentValue?: string) => {
+  let onCellClick = (cellPosition: GridPosition, currentValue?: string) => {
     let nextValue;
 
     if (!currentValue) {
       nextValue = "filled";
     }
 
-    onCellChange(focusedCellId, nextValue);
+    setFocusedPosition(cellPosition);
+    onCellChange(getCellId(cellPosition), nextValue);
   };
+
+  let focusedCellId = getCellId(focusedPosition);
 
   return (
     <table
@@ -163,10 +172,11 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
             // TODO: Investigate a better key for rows and cells.
             <tr key={rowIndex} role="row">
               {[...Array(width)].map((_ignored, columnIndex) => {
-                const cellId = getCellId({
+                const cellPosition = {
                   column: columnIndex,
                   row: rowIndex,
-                });
+                };
+                const cellId = getCellId(cellPosition);
 
                 const cellValue = state[cellId];
 
@@ -179,7 +189,7 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
                     <button
                       id={cellId}
                       className="rounded border border-green-500 h-5 w-5 p-0"
-                      onClick={(e) => onCellClick(cellValue)}
+                      onClick={(e) => onCellClick(cellPosition, cellValue)}
                       // tabIndex is determined by what cell is currently focused.
                       // The focused cell will have 1 while all others will have -1.
                       // Reference: https://www.w3.org/TR/wai-aria-practices/#kbd_roving_tabindex
