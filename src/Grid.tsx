@@ -40,14 +40,14 @@ type GridPosition = {
   row: number;
 };
 
-const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
-
 function useGrid<T extends HTMLElement>({
   height,
   width,
+  getCellId,
 }: {
   height: number;
   width: number;
+  getCellId: (position: GridPosition) => string;
 }) {
   const [gridHasFocus, setGridHasFocus] = useState(false);
   const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
@@ -56,6 +56,10 @@ function useGrid<T extends HTMLElement>({
     row: 0,
   });
 
+  // Compute the focused cell's ID so that the useEffect below
+  // doesn't care if getCellId's reference changes.
+  let focusedCellId = getCellId(focusedPosition);
+
   // When active cell changes, focus that element.
   useEffect(() => {
     // Don't focus children if the component hasn't been focused first.
@@ -63,13 +67,12 @@ function useGrid<T extends HTMLElement>({
       return;
     }
 
-    let focusedCellId = getCellId(focusedPosition);
     let elementReceivingFocus = document.getElementById(focusedCellId);
 
     if (elementReceivingFocus !== null) {
       elementReceivingFocus.focus();
     }
-  }, [gridHasFocus, focusedPosition]);
+  }, [gridHasFocus, focusedCellId]);
 
   // This handles keyboard input to move to the next cell.
   // It will wrap around to the opposite side if we reached the end of the current row or column.
@@ -131,6 +134,8 @@ function useGrid<T extends HTMLElement>({
   };
 }
 
+const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
+
 export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
   const {
     focusedPosition,
@@ -141,6 +146,7 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
   } = useGrid({
     height,
     width,
+    getCellId,
   });
 
   // This handles interaction with the cell/button.
