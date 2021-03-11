@@ -167,6 +167,7 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
   return (
     <table
       role="grid"
+      tabIndex={0}
       className="nonogram-grid"
       onKeyDown={onKeyDown}
       onFocus={onFocus}
@@ -204,6 +205,7 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
                       // Since we will be controlling these values in state,
                       //   we will set the aria attribute ourselves.
                       aria-pressed={cellValue === "filled"}
+                      data-testid={`${columnIndex}:${rowIndex}`}
                     >
                       {/*
                        * This is the accessible name for the button.
