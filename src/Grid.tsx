@@ -167,7 +167,6 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
   return (
     <table
       role="grid"
-      tabIndex={0}
       className="nonogram-grid"
       onKeyDown={onKeyDown}
       onFocus={onFocus}
