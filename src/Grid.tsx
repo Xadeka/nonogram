@@ -196,14 +196,10 @@ export const Grid = ({
                 const cellValue = state[cellId];
 
                 return (
-                  <td
-                    key={columnIndex}
-                    role="gridcell"
-                    style={{ lineHeight: 0 }}
-                  >
+                  <td key={columnIndex} role="gridcell">
                     <button
                       id={cellId}
-                      className="rounded border border-green-500 h-5 w-5 p-0"
+                      className="block h-7 w-7"
                       onClick={(e) => onCellClick(cellPosition, cellValue)}
                       // tabIndex is determined by what cell is currently focused.
                       // The focused cell will have 1 while all others will have -1.
@@ -216,12 +212,11 @@ export const Grid = ({
                       data-testid={`${columnIndex}:${rowIndex}`}
                     >
                       {/*
-                       * This is the accessible name for the button.
-                       * Using the button's content instead of aria-label.
-                       * If there isn't CSS on the page, we will still have labels on the buttons.
+                       * TODO: What would be an accessible name for the cell buttons?
+                       *       Would aria-label be better?
                        * https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/button_role#basic_buttons
                        */}
-                      <span className="sr-only">{`${columnIndex}:${rowIndex}`}</span>
+                      <span className="sr-only">TODO</span>
                     </button>
                   </td>
                 );
