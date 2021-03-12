@@ -35,7 +35,7 @@ type GridProps = {
 /**
  * An object containing 0-indexed `column` and `row` values.
  */
-type GridPosition = {
+export type GridPosition = {
   column: number;
   row: number;
 };
