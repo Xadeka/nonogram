@@ -2,25 +2,6 @@ import { render, cleanup, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Grid } from "./Grid";
 
-let renderGrid = (height: number, width: number) => {
-  render(
-    <Grid height={height} width={width} state={{}} onCellChange={() => {}} />
-  );
-
-  let grid = screen.getByRole("grid");
-
-  return {
-    // The grid cells have test IDs set as "columnIndex:rowIndex".
-    // For example, top left cell has `data-testid="0:0"`
-    getCell: (position: GridPosition) => {
-      return screen.getByTestId(`${position.column}:${position.row}`);
-    },
-    pressKey: (key: string) => {
-      fireEvent.keyDown(grid, { key });
-    },
-  };
-};
-
 afterEach(cleanup);
 
 test("On initial grid focus, move focus to first cell", async () => {
@@ -103,3 +84,55 @@ test("When navigating against an edge of the grid, focus wraps to the opposite s
   pressKey("ArrowRight");
   expect(getCell({ column: 0, row: 0 })).toHaveFocus();
 });
+
+test("Configurable keyboard navigation", () => {
+  let { pressKey, getCell } = renderGrid(5, 5, {
+    up: "w",
+    left: "a",
+    down: "s",
+    right: "d",
+  });
+
+  userEvent.click(getCell({ column: 2, row: 2 }));
+
+  pressKey("w");
+  expect(getCell({ column: 2, row: 1 })).toHaveFocus();
+
+  pressKey("d");
+  expect(getCell({ column: 3, row: 1 })).toHaveFocus();
+
+  pressKey("s");
+  expect(getCell({ column: 3, row: 2 })).toHaveFocus();
+
+  pressKey("a");
+  expect(getCell({ column: 2, row: 2 })).toHaveFocus();
+});
+
+function renderGrid(
+  height: number,
+  width: number,
+  config?: GridControlsConfig
+) {
+  render(
+    <Grid
+      height={height}
+      width={width}
+      state={{}}
+      onCellChange={() => {}}
+      controlsConfig={config}
+    />
+  );
+
+  let grid = screen.getByRole("grid");
+
+  return {
+    // The grid cells have test IDs set as "columnIndex:rowIndex".
+    // For example, top left cell has `data-testid="0:0"`
+    getCell: (position: GridPosition) => {
+      return screen.getByTestId(`${position.column}:${position.row}`);
+    },
+    pressKey: (key: string) => {
+      fireEvent.keyDown(grid, { key });
+    },
+  };
+}

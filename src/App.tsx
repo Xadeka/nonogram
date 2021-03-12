@@ -23,6 +23,12 @@ function App() {
         onCellChange={(cellId, value) => {
           setGridState({ ...gridState, [cellId]: value });
         }}
+        controlsConfig={{
+          up: "w",
+          left: "a",
+          down: "s",
+          right: "d",
+        }}
       />
     </main>
   );

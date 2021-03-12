@@ -30,17 +30,27 @@ type GridProps = {
    * @param value The value that the cell should change to.
    */
   onCellChange: (cellId: string, value?: string) => void;
+  controlsConfig?: GridControlsConfig;
 };
+
+interface UseGridParam {
+  height: number;
+  width: number;
+  getCellId: (position: GridPosition) => string;
+  config?: GridControlsConfig;
+}
 
 function useGrid<T extends HTMLElement>({
   height,
   width,
   getCellId,
-}: {
-  height: number;
-  width: number;
-  getCellId: (position: GridPosition) => string;
-}) {
+  config = {
+    up: "ArrowUp",
+    left: "ArrowLeft",
+    down: "ArrowDown",
+    right: "ArrowRight",
+  },
+}: UseGridParam) {
   const [gridHasFocus, setGridHasFocus] = useState(false);
   const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
     // Initial focus will be the first (top left) cell.
@@ -95,16 +105,16 @@ function useGrid<T extends HTMLElement>({
     let row = focusedPosition.row;
 
     switch (key) {
-      case "ArrowUp":
+      case config.up:
         row = movePrevious(row, height);
         break;
-      case "ArrowRight":
+      case config.right:
         column = moveNext(column, width);
         break;
-      case "ArrowDown":
+      case config.down:
         row = moveNext(row, height);
         break;
-      case "ArrowLeft":
+      case config.left:
         column = movePrevious(column, width);
         break;
       default:
@@ -128,7 +138,13 @@ function useGrid<T extends HTMLElement>({
 
 const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 
-export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
+export const Grid = ({
+  height,
+  width,
+  state,
+  onCellChange,
+  controlsConfig,
+}: GridProps) => {
   const {
     focusedPosition,
     setFocusedPosition,
@@ -139,6 +155,7 @@ export const Grid = ({ height, width, state, onCellChange }: GridProps) => {
     height,
     width,
     getCellId,
+    config: controlsConfig,
   });
 
   // This handles interaction with the cell/button.
