@@ -1,6 +1,6 @@
 import { render, cleanup, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Grid, GridPosition } from "./Grid";
+import { Grid } from "./Grid";
 
 let renderGrid = (height: number, width: number) => {
   render(

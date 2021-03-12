@@ -32,14 +32,6 @@ type GridProps = {
   onCellChange: (cellId: string, value?: string) => void;
 };
 
-/**
- * An object containing 0-indexed `column` and `row` values.
- */
-export type GridPosition = {
-  column: number;
-  row: number;
-};
-
 function useGrid<T extends HTMLElement>({
   height,
   width,
