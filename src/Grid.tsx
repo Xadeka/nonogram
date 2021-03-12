@@ -176,7 +176,7 @@ export const Grid = ({
   return (
     <table
       role="grid"
-      className="nonogram-grid"
+      className="nonogram-grid bg-gray-300 border-2 border-gray-300 rounded-md overflow-hidden"
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -196,10 +196,10 @@ export const Grid = ({
                 const cellValue = state[cellId];
 
                 return (
-                  <td key={columnIndex} role="gridcell">
+                  <td key={columnIndex} role="gridcell" className="p-0.5">
                     <button
                       id={cellId}
-                      className="block h-7 w-7"
+                      className="block h-7 w-7 bg-gray-50 rounded"
                       onClick={(e) => onCellClick(cellPosition, cellValue)}
                       // tabIndex is determined by what cell is currently focused.
                       // The focused cell will have 1 while all others will have -1.

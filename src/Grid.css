@@ -4,6 +4,6 @@
   .nonogram-grid button[aria-pressed="true"] {
     /* Tell PurgeCSS to ignroe this rule for purging. */
     /* purgecss ignore current */
-    @apply bg-black;
+    @apply bg-gray-900;
   }
 }
