@@ -177,7 +177,7 @@ export const Grid = ({
   return (
     <table
       role="grid"
-      className="bg-gray-300 border-2 border-gray-300 rounded-md overflow-hidden"
+      className="bg-gray-300 rounded-md p-0.5 block"
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -203,7 +203,7 @@ export const Grid = ({
                       id={cellId}
                       className={`block h-7 w-7 ${
                         pressed ? "bg-gray-900" : "bg-gray-50"
-                      } rounded`}
+                      } rounded focus:outline-none focus:ring-4 focus:ring-red-500 focus:z-10 relative`}
                       onClick={(e) => onCellClick(cellPosition, cellValue)}
                       // tabIndex is determined by what cell is currently focused.
                       // The focused cell will have 1 while all others will have -1.
