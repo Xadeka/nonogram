@@ -1,9 +1,0 @@
-@layer components {
-  /* The `aria-pressed` attribute with value `true` will represent a filled cell. */
-  /* Is there a way we could do this in the component itself? */
-  .nonogram-grid button[aria-pressed="true"] {
-    /* Tell PurgeCSS to ignroe this rule for purging. */
-    /* purgecss ignore current */
-    @apply bg-gray-900;
-  }
-}

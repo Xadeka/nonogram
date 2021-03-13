@@ -1,5 +1,4 @@
 import React, { useState, useLayoutEffect } from "react";
-import "./Grid.css";
 
 /**
  * An object map of cell IDs and cell values.
@@ -178,7 +177,7 @@ export const Grid = ({
   return (
     <table
       role="grid"
-      className="nonogram-grid bg-gray-300 border-2 border-gray-300 rounded-md overflow-hidden"
+      className="bg-gray-300 border-2 border-gray-300 rounded-md overflow-hidden"
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -193,15 +192,18 @@ export const Grid = ({
                   column: columnIndex,
                   row: rowIndex,
                 };
-                const cellId = getCellId(cellPosition);
 
+                const cellId = getCellId(cellPosition);
                 const cellValue = state[cellId];
+                const pressed = cellValue === "filled";
 
                 return (
                   <td key={columnIndex} role="gridcell" className="p-0.5">
                     <button
                       id={cellId}
-                      className="block h-7 w-7 bg-gray-50 rounded"
+                      className={`block h-7 w-7 ${
+                        pressed ? "bg-gray-900" : "bg-gray-50"
+                      } rounded`}
                       onClick={(e) => onCellClick(cellPosition, cellValue)}
                       // tabIndex is determined by what cell is currently focused.
                       // The focused cell will have 1 while all others will have -1.
@@ -210,7 +212,7 @@ export const Grid = ({
                       // The button pressed state will represent "filled".
                       // Since we will be controlling these values in state,
                       //   we will set the aria attribute ourselves.
-                      aria-pressed={cellValue === "filled"}
+                      aria-pressed={pressed}
                       data-testid={`${columnIndex}:${rowIndex}`}
                     >
                       {/*
