@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import "./Grid.css";
 
 /**
@@ -63,7 +63,9 @@ function useGrid<T extends HTMLElement>({
   let focusedCellId = getCellId(focusedPosition);
 
   // When active cell changes, focus that element.
-  useEffect(() => {
+  // Note: Using useLayoutEffect because useEffect caused
+  // the focus ring to flicker before finally moving focus.
+  useLayoutEffect(() => {
     // Don't focus children if the component hasn't been focused first.
     if (!gridHasFocus) {
       return;
