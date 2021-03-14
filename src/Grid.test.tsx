@@ -113,15 +113,7 @@ function renderGrid(
   width: number,
   config?: GridControlsConfig
 ) {
-  render(
-    <Grid
-      height={height}
-      width={width}
-      state={{}}
-      onCellChange={() => {}}
-      controlsConfig={config}
-    />
-  );
+  render(<Grid height={height} width={width} controlsConfig={config} />);
 
   let grid = screen.getByRole("grid");
 

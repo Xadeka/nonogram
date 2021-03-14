@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useGrid } from "./useGrid";
 
 type GridProps = {
@@ -9,19 +10,10 @@ type GridProps = {
    * The width of the grid.
    */
   width: number;
-  // TODO: Should this state be managed here?
-  // Consider a `defaultState` if we need to initalize it.
-  // But maybe the component should handle state internally.
   /**
-   * The current state of the grid.
+   * The initial state of the grid.
    */
-  state: GridState;
-  /**
-   * Handler for cell state changes.
-   * @param cellId The ID of the cell.
-   * @param value The value that the cell should change to.
-   */
-  onCellChange: (cellId: string, value?: string) => void;
+  initialState?: GridState;
   controlsConfig?: GridControlsConfig;
 };
 
@@ -30,8 +22,7 @@ const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 export const Grid = ({
   height,
   width,
-  state,
-  onCellChange,
+  initialState = {},
   controlsConfig,
 }: GridProps) => {
   const {
@@ -46,6 +37,7 @@ export const Grid = ({
     getCellId,
     config: controlsConfig,
   });
+  const [gridState, setGridState] = useState<GridState>(initialState);
 
   // This handles interaction with the cell/button.
   // It will toggle between "empty" and "filled" at the moment.
@@ -57,7 +49,7 @@ export const Grid = ({
     }
 
     setFocusedPosition(cellPosition);
-    onCellChange(getCellId(cellPosition), nextValue);
+    setGridState({ ...gridState, [getCellId(cellPosition)]: nextValue });
   };
 
   let focusedCellId = getCellId(focusedPosition);
@@ -82,7 +74,7 @@ export const Grid = ({
                 };
 
                 const cellId = getCellId(cellPosition);
-                const cellValue = state[cellId];
+                const cellValue = gridState[cellId];
                 const pressed = cellValue === "filled";
 
                 return (
