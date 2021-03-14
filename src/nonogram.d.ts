@@ -5,6 +5,14 @@ interface GridPosition {
   column: number;
   row: number;
 }
+
+/**
+ * An object map of cell IDs and cell values.
+ */
+interface GridState {
+  [cellId: string]: string | undefined;
+}
+
 interface GridControlsConfig {
   up: string;
   left: string;

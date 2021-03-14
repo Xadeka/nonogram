@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, GridState } from "./Grid";
+import { Grid } from "./Grid";
 
 function App() {
   // Should this state be managed here? I'm not thrilled with the name of `state` prop.
