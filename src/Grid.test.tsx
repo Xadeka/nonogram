@@ -4,7 +4,7 @@ import { Grid } from "./Grid";
 
 afterEach(cleanup);
 
-test("On initial grid focus, move focus to first cell", async () => {
+test("On initial grid focus, move focus to first cell", () => {
   renderGrid(5, 5);
 
   let cell = screen.getByTestId("0:0");
@@ -27,7 +27,7 @@ test("Clicking a cell focuses that cell", () => {
   expect(cell).toHaveFocus();
 });
 
-test("On grid refocus, shift focus to last focused cell", async () => {
+test("On grid refocus, shift focus to last focused cell", () => {
   renderGrid(5, 5);
 
   let cell = screen.getByTestId("3:3");
