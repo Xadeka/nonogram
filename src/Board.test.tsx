@@ -1,11 +1,11 @@
 import { render, cleanup, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Grid } from "./Grid";
+import { Board } from "./Board";
 
 afterEach(cleanup);
 
 test("On initial grid focus, move focus to first cell", () => {
-  renderGrid(5, 5);
+  renderBoard(5, 5);
 
   let cell = screen.getByTestId("0:0");
 
@@ -18,7 +18,7 @@ test("On initial grid focus, move focus to first cell", () => {
 });
 
 test("Clicking a cell focuses that cell", () => {
-  let { getCell } = renderGrid(5, 5);
+  let { getCell } = renderBoard(5, 5);
 
   let cell = getCell({ column: 3, row: 2 });
 
@@ -28,7 +28,7 @@ test("Clicking a cell focuses that cell", () => {
 });
 
 test("On grid refocus, shift focus to last focused cell", () => {
-  renderGrid(5, 5);
+  renderBoard(5, 5);
 
   let cell = screen.getByTestId("3:3");
 
@@ -46,7 +46,7 @@ test("On grid refocus, shift focus to last focused cell", () => {
 });
 
 test("Can use arrow keys for board navigation", () => {
-  let { pressKey, getCell } = renderGrid(5, 5);
+  let { pressKey, getCell } = renderBoard(5, 5);
 
   userEvent.click(getCell({ column: 2, row: 2 }));
 
@@ -64,7 +64,7 @@ test("Can use arrow keys for board navigation", () => {
 });
 
 test("When navigating against an edge of the grid, focus wraps to the opposite side", () => {
-  let { pressKey, getCell } = renderGrid(5, 5);
+  let { pressKey, getCell } = renderBoard(5, 5);
 
   userEvent.click(getCell({ column: 0, row: 0 }));
 
@@ -86,7 +86,7 @@ test("When navigating against an edge of the grid, focus wraps to the opposite s
 });
 
 test("Configurable keyboard navigation", () => {
-  let { pressKey, getCell } = renderGrid(5, 5, {
+  let { pressKey, getCell } = renderBoard(5, 5, {
     up: "w",
     left: "a",
     down: "s",
@@ -108,12 +108,12 @@ test("Configurable keyboard navigation", () => {
   expect(getCell({ column: 2, row: 2 })).toHaveFocus();
 });
 
-function renderGrid(
+function renderBoard(
   height: number,
   width: number,
   config?: GridControlsConfig
 ) {
-  render(<Grid height={height} width={width} controlsConfig={config} />);
+  render(<Board height={height} width={width} controlsConfig={config} />);
 
   let grid = screen.getByRole("grid");
 

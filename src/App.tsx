@@ -1,4 +1,4 @@
-import { Grid } from "./Grid";
+import { Board } from "./Board";
 import { createBoardState } from "./utils";
 
 // This is temporary.
@@ -15,7 +15,7 @@ function App() {
   return (
     // Temporary container to center the grid.
     <main className="flex justify-center p-5">
-      <Grid
+      <Board
         height={height}
         width={width}
         initialState={intialGridState}

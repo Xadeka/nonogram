@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGrid } from "./useGrid";
 import { createBoardState } from "./utils";
 
-type GridProps = {
+type BoardProps = {
   /**
    * The height of the grid.
    */
@@ -12,7 +12,7 @@ type GridProps = {
    */
   width: number;
   /**
-   * The initial state of the grid.
+   * The initial state of the board.
    */
   initialState?: BoardState;
   controlsConfig?: GridControlsConfig;
@@ -20,12 +20,12 @@ type GridProps = {
 
 const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 
-export const Grid = ({
+export const Board = ({
   height,
   width,
   initialState,
   controlsConfig,
-}: GridProps) => {
+}: BoardProps) => {
   const {
     focusedPosition,
     setFocusedPosition,
@@ -38,7 +38,7 @@ export const Grid = ({
     getCellId,
     config: controlsConfig,
   });
-  const [gridState, setGridState] = useState<BoardState>(
+  const [boardState, setBoardState] = useState<BoardState>(
     initialState ?? createBoardState(height, width)
   );
 
@@ -52,10 +52,10 @@ export const Grid = ({
     }
 
     setFocusedPosition(cellPosition);
-    setGridState({
-      ...gridState,
+    setBoardState({
+      ...boardState,
       [cellPosition.row]: {
-        ...gridState[cellPosition.row],
+        ...boardState[cellPosition.row],
         [cellPosition.column]: nextValue,
       },
     });
@@ -83,7 +83,7 @@ export const Grid = ({
                 };
 
                 const cellId = getCellId(cellPosition);
-                const cellValue = gridState[rowIndex][columnIndex];
+                const cellValue = boardState[rowIndex][columnIndex];
                 const pressed = cellValue === "filled";
 
                 return (
