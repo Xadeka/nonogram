@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useGrid } from "./useGrid";
+import { createBoardState } from "./utils";
 
 type GridProps = {
   /**
@@ -13,7 +14,7 @@ type GridProps = {
   /**
    * The initial state of the grid.
    */
-  initialState?: GridState;
+  initialState?: BoardState;
   controlsConfig?: GridControlsConfig;
 };
 
@@ -22,7 +23,7 @@ const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
 export const Grid = ({
   height,
   width,
-  initialState = {},
+  initialState,
   controlsConfig,
 }: GridProps) => {
   const {
@@ -37,19 +38,27 @@ export const Grid = ({
     getCellId,
     config: controlsConfig,
   });
-  const [gridState, setGridState] = useState<GridState>(initialState);
+  const [gridState, setGridState] = useState<BoardState>(
+    initialState ?? createBoardState(height, width)
+  );
 
   // This handles interaction with the cell/button.
   // It will toggle between "empty" and "filled" at the moment.
   let onCellClick = (cellPosition: GridPosition, currentValue?: string) => {
-    let nextValue;
+    let nextValue: CellValue;
 
     if (!currentValue) {
       nextValue = "filled";
     }
 
     setFocusedPosition(cellPosition);
-    setGridState({ ...gridState, [getCellId(cellPosition)]: nextValue });
+    setGridState({
+      ...gridState,
+      [cellPosition.row]: {
+        ...gridState[cellPosition.row],
+        [cellPosition.column]: nextValue,
+      },
+    });
   };
 
   let focusedCellId = getCellId(focusedPosition);
@@ -74,7 +83,7 @@ export const Grid = ({
                 };
 
                 const cellId = getCellId(cellPosition);
-                const cellValue = gridState[cellId];
+                const cellValue = gridState[rowIndex][columnIndex];
                 const pressed = cellValue === "filled";
 
                 return (

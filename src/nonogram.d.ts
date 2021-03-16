@@ -6,11 +6,15 @@ interface GridPosition {
   row: number;
 }
 
+type CellValue = "filled" | undefined;
+
 /**
  * An object map of cell IDs and cell values.
  */
-interface GridState {
-  [cellId: string]: string | undefined;
+interface BoardState {
+  [row: number]: {
+    [column: number]: CellValue;
+  };
 }
 
 interface GridControlsConfig {
