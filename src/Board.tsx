@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useGrid } from "./useGrid";
-import { createBoardState } from "./utils";
+import { createBoardState, getCellTestId } from "./utils";
 
 type BoardProps = {
   /**
@@ -18,7 +18,7 @@ type BoardProps = {
   controlsConfig?: GridControlsConfig;
 };
 
-const getCellId = ({ column, row }: GridPosition) => `cell-${column}-${row}`;
+const getCellId = ({ row, column }: GridPosition) => `cell-${row}-${column}`;
 
 export const Board = ({
   height,
@@ -78,8 +78,8 @@ export const Board = ({
             <tr key={rowIndex} role="row">
               {[...Array(width)].map((_ignored, columnIndex) => {
                 const cellPosition = {
-                  column: columnIndex,
                   row: rowIndex,
+                  column: columnIndex,
                 };
 
                 const cellId = getCellId(cellPosition);
@@ -102,7 +102,7 @@ export const Board = ({
                       // Since we will be controlling these values in state,
                       //   we will set the aria attribute ourselves.
                       aria-pressed={pressed}
-                      data-testid={`${columnIndex}:${rowIndex}`}
+                      data-testid={getCellTestId(cellPosition)}
                     >
                       {/*
                        * TODO: What would be an accessible name for the cell buttons?

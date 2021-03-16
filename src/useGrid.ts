@@ -21,8 +21,8 @@ export function useGrid<T extends HTMLElement>({
   const [gridHasFocus, setGridHasFocus] = useState(false);
   const [focusedPosition, setFocusedPosition] = useState<GridPosition>({
     // Initial focus will be the first (top left) cell.
-    column: 0,
     row: 0,
+    column: 0,
   });
 
   // Compute the focused cell's ID so that the useEffect below
@@ -68,10 +68,10 @@ export function useGrid<T extends HTMLElement>({
       }
     };
 
-    // Update column and row to their next value.
+    // Update row and column to their next value.
     // Default to their current postiion.
-    let column = focusedPosition.column;
     let row = focusedPosition.row;
+    let column = focusedPosition.column;
 
     switch (key) {
       case config.up:
@@ -90,7 +90,7 @@ export function useGrid<T extends HTMLElement>({
         break;
     }
 
-    setFocusedPosition({ column, row });
+    setFocusedPosition({ row, column });
   };
 
   return {

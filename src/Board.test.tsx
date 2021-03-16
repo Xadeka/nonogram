@@ -20,10 +20,10 @@ test("On initial grid focus, move focus to first cell", () => {
 test("Clicking a cell focuses that cell", () => {
   let { getCell } = renderBoard(5, 5);
 
-  let cell = getCell({ column: 3, row: 2 });
+  let cell = getCell({ row: 2, column: 3 });
 
   expect(cell).not.toHaveFocus();
-  userEvent.click(getCell({ column: 3, row: 2 }));
+  userEvent.click(getCell({ row: 2, column: 3 }));
   expect(cell).toHaveFocus();
 });
 
@@ -48,41 +48,41 @@ test("On grid refocus, shift focus to last focused cell", () => {
 test("Can use arrow keys for board navigation", () => {
   let { pressKey, getCell } = renderBoard(5, 5);
 
-  userEvent.click(getCell({ column: 2, row: 2 }));
+  userEvent.click(getCell({ row: 2, column: 2 }));
 
   pressKey("ArrowUp");
-  expect(getCell({ column: 2, row: 1 })).toHaveFocus();
+  expect(getCell({ row: 1, column: 2 })).toHaveFocus();
 
   pressKey("ArrowRight");
-  expect(getCell({ column: 3, row: 1 })).toHaveFocus();
+  expect(getCell({ row: 1, column: 3 })).toHaveFocus();
 
   pressKey("ArrowDown");
-  expect(getCell({ column: 3, row: 2 })).toHaveFocus();
+  expect(getCell({ row: 2, column: 3 })).toHaveFocus();
 
   pressKey("ArrowLeft");
-  expect(getCell({ column: 2, row: 2 })).toHaveFocus();
+  expect(getCell({ row: 2, column: 2 })).toHaveFocus();
 });
 
 test("When navigating against an edge of the grid, focus wraps to the opposite side", () => {
   let { pressKey, getCell } = renderBoard(5, 5);
 
-  userEvent.click(getCell({ column: 0, row: 0 }));
+  userEvent.click(getCell({ row: 0, column: 0 }));
 
   // Wrap from top to bottom...
   pressKey("ArrowUp");
-  expect(getCell({ column: 0, row: 4 })).toHaveFocus();
+  expect(getCell({ row: 4, column: 0 })).toHaveFocus();
 
   // ...and back to top.
   pressKey("ArrowDown");
-  expect(getCell({ column: 0, row: 0 })).toHaveFocus();
+  expect(getCell({ row: 0, column: 0 })).toHaveFocus();
 
   // Then to the left...
   pressKey("ArrowLeft");
-  expect(getCell({ column: 4, row: 0 })).toHaveFocus();
+  expect(getCell({ row: 0, column: 4 })).toHaveFocus();
 
   // ...and back to right.
   pressKey("ArrowRight");
-  expect(getCell({ column: 0, row: 0 })).toHaveFocus();
+  expect(getCell({ row: 0, column: 0 })).toHaveFocus();
 });
 
 test("Configurable keyboard navigation", () => {
@@ -93,19 +93,19 @@ test("Configurable keyboard navigation", () => {
     right: "d",
   });
 
-  userEvent.click(getCell({ column: 2, row: 2 }));
+  userEvent.click(getCell({ row: 2, column: 2 }));
 
   pressKey("w");
-  expect(getCell({ column: 2, row: 1 })).toHaveFocus();
+  expect(getCell({ row: 1, column: 2 })).toHaveFocus();
 
   pressKey("d");
-  expect(getCell({ column: 3, row: 1 })).toHaveFocus();
+  expect(getCell({ row: 1, column: 3 })).toHaveFocus();
 
   pressKey("s");
-  expect(getCell({ column: 3, row: 2 })).toHaveFocus();
+  expect(getCell({ row: 2, column: 3 })).toHaveFocus();
 
   pressKey("a");
-  expect(getCell({ column: 2, row: 2 })).toHaveFocus();
+  expect(getCell({ row: 2, column: 2 })).toHaveFocus();
 });
 
 function renderBoard(
@@ -118,10 +118,10 @@ function renderBoard(
   let grid = screen.getByRole("grid");
 
   return {
-    // The grid cells have test IDs set as "columnIndex:rowIndex".
-    // For example, top left cell has `data-testid="0:0"`
+    // The grid cells have test IDs set as "rowIndex:columnIndex".
+    // For example, top middle cell of a 5x5 grid has `data-testid="0:2"`
     getCell: (position: GridPosition) => {
-      return screen.getByTestId(`${position.column}:${position.row}`);
+      return screen.getByTestId(`${position.row}:${position.column}`);
     },
     pressKey: (key: string) => {
       fireEvent.keyDown(grid, { key });

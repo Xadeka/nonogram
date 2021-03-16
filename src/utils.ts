@@ -18,3 +18,13 @@ export const createBoardState = (height: number, width: number) => {
 
   return state;
 };
+
+/**
+ * Creates a test ID for the given cell position.
+ *
+ * @param position The cell's position
+ * @returns The test ID string for the cell.
+ */
+export const getCellTestId = (position: GridPosition) => {
+  return `${position.row}:${position.column}`;
+};

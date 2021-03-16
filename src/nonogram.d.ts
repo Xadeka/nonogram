@@ -1,9 +1,9 @@
 /**
- * An object containing 0-indexed `column` and `row` values.
+ * An object containing 0-indexed `row` and `column` values.
  */
 interface GridPosition {
-  column: number;
   row: number;
+  column: number;
 }
 
 type CellValue = "filled" | undefined;
