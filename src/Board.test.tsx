@@ -123,13 +123,14 @@ test("Configurable keyboard navigation", () => {
 test("Display clues in the headers", () => {
   let { getHeader } = renderBoard({
     row: [[3], [1, 2, 3]],
-    column: [[1, 1], [4]],
+    column: [[1, 1], [], [4]],
   });
 
   expect(getHeader(0, "row")).toHaveTextContent("3");
   expect(getHeader(1, "row")).toHaveTextContent("1 2 3");
   expect(getHeader(0, "column")).toHaveTextContent("1 1");
-  expect(getHeader(1, "column")).toHaveTextContent("4");
+  expect(getHeader(1, "column")).toHaveTextContent("0");
+  expect(getHeader(2, "column")).toHaveTextContent("4");
 });
 
 function renderBoard(clues: BoardClues, config?: GridControlsConfig) {

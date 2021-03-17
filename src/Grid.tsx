@@ -79,7 +79,9 @@ interface GridHeaderProps {
 const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
   return (
     <th scope={scope} data-testid={testId}>
-      <span className="font-normal">{clues.join(" ")}</span>
+      <span className="font-normal">
+        {clues.length > 0 ? clues.join(" ") : 0}
+      </span>
     </th>
   );
 };
