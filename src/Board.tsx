@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useGrid } from "./useGrid";
+import { Grid } from "./Grid";
 import { createBoardState, getCellTestId } from "./utils";
 
-type BoardProps = {
+const getCellId = ({ row, column }: GridPosition) => `cell-${row}-${column}`;
+
+interface BoardProps {
   /**
    * The height of the grid.
    */
@@ -16,9 +19,7 @@ type BoardProps = {
    */
   initialState?: BoardState;
   controlsConfig?: GridControlsConfig;
-};
-
-const getCellId = ({ row, column }: GridPosition) => `cell-${row}-${column}`;
+}
 
 export const Board = ({
   height,
@@ -64,60 +65,33 @@ export const Board = ({
   let focusedCellId = getCellId(focusedPosition);
 
   return (
-    <table
-      role="grid"
-      className="bg-gray-300 rounded-md p-0.5 block"
-      onKeyDown={onKeyDown}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    >
-      <tbody>
-        {[...Array(height)].map((_ignored, rowIndex) => {
-          return (
-            // TODO: Investigate a better key for rows and cells.
-            <tr key={rowIndex} role="row">
-              {[...Array(width)].map((_ignored, columnIndex) => {
-                const cellPosition = {
-                  row: rowIndex,
-                  column: columnIndex,
-                };
+    <Grid onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur}>
+      {[...Array(height)].map((_ignored, rowIndex) => {
+        return (
+          // TODO: Investigate a better key for rows and cells.
+          <Grid.Row key={rowIndex}>
+            {[...Array(width)].map((_ignored, columnIndex) => {
+              let cellPosition = { row: rowIndex, column: columnIndex };
+              let cellId = getCellId(cellPosition);
+              let cellValue = boardState[rowIndex][columnIndex];
 
-                const cellId = getCellId(cellPosition);
-                const cellValue = boardState[rowIndex][columnIndex];
-                const pressed = cellValue === "filled";
-
-                return (
-                  <td key={columnIndex} role="gridcell" className="p-0.5">
-                    <button
-                      id={cellId}
-                      className={`block h-7 w-7 ${
-                        pressed ? "bg-gray-900" : "bg-gray-50"
-                      } rounded focus:outline-none focus:ring-4 focus:ring-red-500 focus:z-10 relative`}
-                      onClick={(e) => onCellClick(cellPosition, cellValue)}
-                      // tabIndex is determined by what cell is currently focused.
-                      // The focused cell will have 1 while all others will have -1.
-                      // Reference: https://www.w3.org/TR/wai-aria-practices/#kbd_roving_tabindex
-                      tabIndex={cellId === focusedCellId ? 1 : -1}
-                      // The button pressed state will represent "filled".
-                      // Since we will be controlling these values in state,
-                      //   we will set the aria attribute ourselves.
-                      aria-pressed={pressed}
-                      data-testid={getCellTestId(cellPosition)}
-                    >
-                      {/*
-                       * TODO: What would be an accessible name for the cell buttons?
-                       *       Would aria-label be better?
-                       * https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/button_role#basic_buttons
-                       */}
-                      <span className="sr-only">TODO</span>
-                    </button>
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+              return (
+                <Grid.Cell
+                  key={columnIndex}
+                  id={cellId}
+                  value={cellValue}
+                  onClick={(e) => onCellClick(cellPosition, cellValue)}
+                  // tabIndex is determined by what cell is currently focused.
+                  // The focused cell will have 1 while all others will have -1.
+                  // Reference: https://www.w3.org/TR/wai-aria-practices/#kbd_roving_tabindex
+                  tabIndex={cellId === focusedCellId ? 1 : -1}
+                  testId={getCellTestId(cellPosition)}
+                />
+              );
+            })}
+          </Grid.Row>
+        );
+      })}
+    </Grid>
   );
 };
