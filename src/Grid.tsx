@@ -1,4 +1,5 @@
 import React from "react";
+import "./Grid.css";
 
 interface GridProps {
   onKeyDown?: React.KeyboardEventHandler;
@@ -15,7 +16,7 @@ export const Grid = ({
   return (
     <table
       role="grid"
-      className="bg-gray-300 rounded-md p-0.5 block"
+      className="nonogram"
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -43,12 +44,10 @@ const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
   let pressed = value === "filled";
 
   return (
-    <td role="gridcell" className="p-0.5">
+    <td role="gridcell">
       <button
         id={id}
-        className={`block h-7 w-7 ${
-          pressed ? "bg-gray-900" : "bg-gray-50"
-        } rounded focus:outline-none focus:ring-4 focus:ring-red-500 focus:z-10 relative`}
+        className="button-cell"
         onClick={onClick}
         tabIndex={tabIndex}
         // The button pressed state will represent "filled".
