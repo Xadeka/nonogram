@@ -65,11 +65,27 @@ export const Board = ({
   let focusedCellId = getCellId(focusedPosition);
 
   return (
+    // TODO: Investigate a better key for rows and cells.
     <Grid onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur}>
+      {/* Column headers go in their own row */}
+      <Grid.Row>
+        <Grid.CornerCell />
+        {[...Array(width)].map((_ignored, columnIndex) => {
+          return (
+            <Grid.Header
+              key={columnIndex}
+              scope="col"
+              clues={[]}
+              testId={`column-${columnIndex}`}
+            />
+          );
+        })}
+      </Grid.Row>
       {[...Array(height)].map((_ignored, rowIndex) => {
         return (
-          // TODO: Investigate a better key for rows and cells.
           <Grid.Row key={rowIndex}>
+            {/* The cell rows will contain their own header */}
+            <Grid.Header scope="row" clues={[]} testId={`row-${rowIndex}`} />
             {[...Array(width)].map((_ignored, columnIndex) => {
               let cellPosition = { row: rowIndex, column: columnIndex };
               let cellId = getCellId(cellPosition);

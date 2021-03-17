@@ -69,3 +69,27 @@ const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
 };
 Grid.Cell = GridCell;
 (Grid.Cell as React.FunctionComponent).displayName = "Grid.Cell";
+
+interface GridHeaderProps {
+  scope: "row" | "col";
+  clues: number[]; // TODO: Type this better.
+  testId: string;
+}
+
+const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
+  return (
+    <th scope={scope} data-testid={testId}>
+      <div className={`flex ${scope === "col" ? "flex-col" : ""} font-normal`}>
+        <span className="h-6 w-6">0</span>
+      </div>
+    </th>
+  );
+};
+Grid.Header = GridHeader;
+(Grid.Header as React.FunctionComponent).displayName = "Grid.Header";
+
+const GridCornerCell = () => {
+  return <td></td>;
+};
+Grid.CornerCell = GridCornerCell;
+(Grid.CornerCell as React.FunctionComponent).displayName = "Grid.CornerCell";
