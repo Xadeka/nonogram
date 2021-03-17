@@ -79,9 +79,7 @@ interface GridHeaderProps {
 const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
   return (
     <th scope={scope} data-testid={testId}>
-      <div className={`flex ${scope === "col" ? "flex-col" : ""} font-normal`}>
-        <span className="h-6 w-6">0</span>
-      </div>
+      <span className="font-normal">{clues.join(" ")}</span>
     </th>
   );
 };

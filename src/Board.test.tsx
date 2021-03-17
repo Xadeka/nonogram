@@ -5,7 +5,7 @@ import { Board } from "./Board";
 afterEach(cleanup);
 
 test("On initial grid focus, move focus to first cell", () => {
-  renderBoard(5, 5);
+  renderBoard({ row: [[], [], [], [], []], column: [[], [], [], [], []] });
 
   let cell = screen.getByTestId("0:0");
 
@@ -18,7 +18,10 @@ test("On initial grid focus, move focus to first cell", () => {
 });
 
 test("Clicking a cell focuses that cell", () => {
-  let { getCell } = renderBoard(5, 5);
+  let { getCell } = renderBoard({
+    row: [[], [], [], [], []],
+    column: [[], [], [], [], []],
+  });
 
   let cell = getCell({ row: 2, column: 3 });
 
@@ -28,7 +31,7 @@ test("Clicking a cell focuses that cell", () => {
 });
 
 test("On grid refocus, shift focus to last focused cell", () => {
-  renderBoard(5, 5);
+  renderBoard({ row: [[], [], [], [], []], column: [[], [], [], [], []] });
 
   let cell = screen.getByTestId("3:3");
 
@@ -46,7 +49,10 @@ test("On grid refocus, shift focus to last focused cell", () => {
 });
 
 test("Can use arrow keys for board navigation", () => {
-  let { pressKey, getCell } = renderBoard(5, 5);
+  let { pressKey, getCell } = renderBoard({
+    row: [[], [], [], [], []],
+    column: [[], [], [], [], []],
+  });
 
   userEvent.click(getCell({ row: 2, column: 2 }));
 
@@ -64,7 +70,10 @@ test("Can use arrow keys for board navigation", () => {
 });
 
 test("When navigating against an edge of the grid, focus wraps to the opposite side", () => {
-  let { pressKey, getCell } = renderBoard(5, 5);
+  let { pressKey, getCell } = renderBoard({
+    row: [[], [], [], [], []],
+    column: [[], [], [], [], []],
+  });
 
   userEvent.click(getCell({ row: 0, column: 0 }));
 
@@ -86,12 +95,15 @@ test("When navigating against an edge of the grid, focus wraps to the opposite s
 });
 
 test("Configurable keyboard navigation", () => {
-  let { pressKey, getCell } = renderBoard(5, 5, {
-    up: "w",
-    left: "a",
-    down: "s",
-    right: "d",
-  });
+  let { pressKey, getCell } = renderBoard(
+    { row: [[], [], [], [], []], column: [[], [], [], [], []] },
+    {
+      up: "w",
+      left: "a",
+      down: "s",
+      right: "d",
+    }
+  );
 
   userEvent.click(getCell({ row: 2, column: 2 }));
 
@@ -108,12 +120,20 @@ test("Configurable keyboard navigation", () => {
   expect(getCell({ row: 2, column: 2 })).toHaveFocus();
 });
 
-function renderBoard(
-  height: number,
-  width: number,
-  config?: GridControlsConfig
-) {
-  render(<Board height={height} width={width} controlsConfig={config} />);
+test("Display clues in the headers", () => {
+  let { getHeader } = renderBoard({
+    row: [[3], [1, 2, 3]],
+    column: [[1, 1], [4]],
+  });
+
+  expect(getHeader(0, "row")).toHaveTextContent("3");
+  expect(getHeader(1, "row")).toHaveTextContent("1 2 3");
+  expect(getHeader(0, "column")).toHaveTextContent("1 1");
+  expect(getHeader(1, "column")).toHaveTextContent("4");
+});
+
+function renderBoard(clues: BoardClues, config?: GridControlsConfig) {
+  render(<Board clues={clues} controlsConfig={config} />);
 
   let grid = screen.getByRole("grid");
 
@@ -122,6 +142,9 @@ function renderBoard(
     // For example, top middle cell of a 5x5 grid has `data-testid="0:2"`
     getCell: (position: GridPosition) => {
       return screen.getByTestId(`${position.row}:${position.column}`);
+    },
+    getHeader: (index: number, direction: "row" | "column") => {
+      return screen.getByTestId(`${direction}header:${index}`);
     },
     pressKey: (key: string) => {
       fireEvent.keyDown(grid, { key });

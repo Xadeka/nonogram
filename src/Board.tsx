@@ -7,13 +7,9 @@ const getCellId = ({ row, column }: GridPosition) => `cell-${row}-${column}`;
 
 interface BoardProps {
   /**
-   * The height of the grid.
+   * The clues (or hints) that appear above columns and to the side of rows.
    */
-  height: number;
-  /**
-   * The width of the grid.
-   */
-  width: number;
+  clues: BoardClues;
   /**
    * The initial state of the board.
    */
@@ -21,12 +17,9 @@ interface BoardProps {
   controlsConfig?: GridControlsConfig;
 }
 
-export const Board = ({
-  height,
-  width,
-  initialState,
-  controlsConfig,
-}: BoardProps) => {
+export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
+  let height = clues.row.length;
+  let width = clues.column.length;
   const {
     focusedPosition,
     setFocusedPosition,
@@ -75,8 +68,8 @@ export const Board = ({
             <Grid.Header
               key={columnIndex}
               scope="col"
-              clues={[]}
-              testId={`column-${columnIndex}`}
+              clues={clues.column[columnIndex]}
+              testId={`columnheader:${columnIndex}`}
             />
           );
         })}
@@ -85,7 +78,11 @@ export const Board = ({
         return (
           <Grid.Row key={rowIndex}>
             {/* The cell rows will contain their own header */}
-            <Grid.Header scope="row" clues={[]} testId={`row-${rowIndex}`} />
+            <Grid.Header
+              scope="row"
+              clues={clues.row[rowIndex]}
+              testId={`rowheader:${rowIndex}`}
+            />
             {[...Array(width)].map((_ignored, columnIndex) => {
               let cellPosition = { row: rowIndex, column: columnIndex };
               let cellId = getCellId(cellPosition);

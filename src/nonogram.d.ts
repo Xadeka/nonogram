@@ -17,6 +17,19 @@ interface BoardState {
   };
 }
 
+/**
+ * An object with row and column clues.
+ * These are used to display the clues (or hints)
+ * at the ends of a row or column.
+ *
+ * Clues for row with the value [[1, 1], [], [2]]
+ * would have 3 rows.
+ */
+interface BoardClues {
+  row: number[][];
+  column: number[][];
+}
+
 interface GridControlsConfig {
   up: string;
   left: string;
