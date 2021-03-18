@@ -76,11 +76,32 @@ interface GridHeaderProps {
 }
 
 const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
+  let label = clues.join(" ");
+  if (label.length === 0) {
+    label = "0";
+  }
+
   return (
-    <th scope={scope} data-testid={testId}>
-      <span className="font-normal">
-        {clues.length > 0 ? clues.join(" ") : 0}
-      </span>
+    <th
+      scope={scope}
+      className="clues-header"
+      data-testid={testId}
+      // I intended this to be read by the screen reader.
+      // VoiceOver currently reads row headers but not columns.
+      // Check if the aria-label is actually working. Maybe VO is reading the list.
+      // Possibly consider adding a label with sr-only?
+      aria-label={label}
+    >
+      <ol className="font-normal font-mono">
+        {clues.map((clue, clueIndex) => {
+          return (
+            <li key={clueIndex} className="text-gray-900">
+              {clue}
+            </li>
+          );
+        })}
+        {clues.length === 0 ? <li className="text-gray-400">0</li> : null}
+      </ol>
     </th>
   );
 };
@@ -88,6 +109,7 @@ Grid.Header = GridHeader;
 (Grid.Header as React.FunctionComponent).displayName = "Grid.Header";
 
 const GridCornerCell = () => {
+  // TODO: This possibly needs to be a th?
   return <td></td>;
 };
 Grid.CornerCell = GridCornerCell;

@@ -1,4 +1,18 @@
 @layer components {
+  /* Layout of headers. */
+  .clues-header[scope="row"] {
+    @apply pr-2;
+  }
+
+  .clues-header[scope="row"] ol {
+    /* Display the list inline and align it to the right. */
+    @apply flex gap-2 justify-end;
+  }
+
+  .clues-header[scope="col"] {
+    @apply align-bottom;
+  }
+
   /* 
   * Notes on the selectors used below:
   *
