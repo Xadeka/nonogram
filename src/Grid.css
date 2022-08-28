@@ -1,0 +1,76 @@
+@layer components {
+  /* Layout of headers. */
+  .clues-header[scope="row"] {
+    @apply pr-2;
+  }
+
+  .clues-header[scope="row"] ol {
+    /* Display the list inline and align it to the right. */
+    @apply flex gap-2 justify-end;
+  }
+
+  .clues-header[scope="col"] {
+    @apply align-bottom;
+  }
+
+  /* 
+  * Notes on the selectors used below:
+  *
+  * tr:nth-child(2) - the first interactive grid row.
+  * The first tr is for the column headers.
+  *
+  * td[role="gridcell"] - the grid cells (in case there are other td elements).
+  */
+
+  /* The gridcell containing the button. */
+  .nonogram td[role="gridcell"] {
+    @apply p-0.5 bg-gray-300;
+  }
+
+  .nonogram tr:nth-child(2) td[role="gridcell"] {
+    @apply pt-1;
+  }
+
+  .nonogram td[role="gridcell"]:first-of-type {
+    @apply pl-1;
+  }
+
+  .nonogram td[role="gridcell"]:last-child {
+    @apply pr-1;
+  }
+
+  .nonogram tr:last-child td[role="gridcell"] {
+    @apply pb-1;
+  }
+
+  /* Round the cornders of grid excluding headers. */
+
+  .nonogram tr:nth-child(2) td[role="gridcell"]:first-of-type {
+    @apply rounded-tl-md;
+  }
+
+  .nonogram tr:nth-child(2) td[role="gridcell"]:last-child {
+    @apply rounded-tr-md;
+  }
+
+  .nonogram tr:last-child td[role="gridcell"]:first-of-type {
+    @apply rounded-bl-md;
+  }
+
+  .nonogram tr:last-child td[role="gridcell"]:last-child {
+    @apply rounded-br-md;
+  }
+
+  /* The interactive element in the cell.  */
+  .nonogram .button-cell {
+    @apply block h-7 w-7 rounded bg-gray-50;
+  }
+
+  .nonogram td .button-cell:focus {
+    @apply outline-none ring-4 ring-red-500 z-10 relative;
+  }
+
+  .nonogram td .button-cell[aria-pressed="true"] {
+    @apply bg-gray-900;
+  }
+}
