@@ -19,7 +19,7 @@ let clues = {
 function App() {
   return (
     // Temporary container to center the grid.
-    <main className="flex justify-center p-5">
+    <main>
       <Board
         clues={clues}
         initialState={intialGridState}
