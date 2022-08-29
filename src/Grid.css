@@ -1,19 +1,29 @@
-@layer components {
-  /* Layout of headers. */
-  .clues-header[scope="row"] {
-    @apply pr-2;
-  }
+/* Layout of headers. */
+.clues-header[scope="row"] {
+  padding-right: 0.5rem;
+}
 
-  .clues-header[scope="row"] ol {
-    /* Display the list inline and align it to the right. */
-    @apply flex gap-2 justify-end;
-  }
+.clues-header[scope="row"] ol {
+  /* Display the list inline and align it to the right. */
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
 
-  .clues-header[scope="col"] {
-    @apply align-bottom;
-  }
+.clues-header[scope="col"] {
+  vertical-align: bottom;
+}
 
-  /* 
+.clues-header {
+  color: #111827;
+  font-family: monospace;
+}
+
+.clues-header li {
+  color: #9ca3af;
+}
+
+/* 
   * Notes on the selectors used below:
   *
   * tr:nth-child(2) - the first interactive grid row.
@@ -22,55 +32,66 @@
   * td[role="gridcell"] - the grid cells (in case there are other td elements).
   */
 
-  /* The gridcell containing the button. */
-  .nonogram td[role="gridcell"] {
-    @apply p-0.5 bg-gray-300;
-  }
+/* The gridcell containing the button. */
+.nonogram td[role="gridcell"] {
+  padding: 0.125rem;
+  background-color: #d1d5db;
+}
 
-  .nonogram tr:nth-child(2) td[role="gridcell"] {
-    @apply pt-1;
-  }
+.nonogram tr:nth-child(2) td[role="gridcell"] {
+  padding-top: 0.25rem;
+}
 
-  .nonogram td[role="gridcell"]:first-of-type {
-    @apply pl-1;
-  }
+.nonogram td[role="gridcell"]:first-of-type {
+  padding-left: 0.25rem;
+}
 
-  .nonogram td[role="gridcell"]:last-child {
-    @apply pr-1;
-  }
+.nonogram td[role="gridcell"]:last-child {
+  padding-right: 0.25rem;
+}
 
-  .nonogram tr:last-child td[role="gridcell"] {
-    @apply pb-1;
-  }
+.nonogram tr:last-child td[role="gridcell"] {
+  padding-bottom: 0.25rem;
+}
 
-  /* Round the cornders of grid excluding headers. */
+/* Round the cornders of grid excluding headers. */
 
-  .nonogram tr:nth-child(2) td[role="gridcell"]:first-of-type {
-    @apply rounded-tl-md;
-  }
+.nonogram tr:nth-child(2) td[role="gridcell"]:first-of-type {
+  border-top-left-radius: 0.375rem;
+}
 
-  .nonogram tr:nth-child(2) td[role="gridcell"]:last-child {
-    @apply rounded-tr-md;
-  }
+.nonogram tr:nth-child(2) td[role="gridcell"]:last-child {
+  border-top-right-radius: 0.375rem;
+}
 
-  .nonogram tr:last-child td[role="gridcell"]:first-of-type {
-    @apply rounded-bl-md;
-  }
+.nonogram tr:last-child td[role="gridcell"]:first-of-type {
+  border-bottom-left-radius: 0.375rem;
+}
 
-  .nonogram tr:last-child td[role="gridcell"]:last-child {
-    @apply rounded-br-md;
-  }
+.nonogram tr:last-child td[role="gridcell"]:last-child {
+  border-bottom-right-radius: 0.375rem;
+}
 
-  /* The interactive element in the cell.  */
-  .nonogram .button-cell {
-    @apply block h-7 w-7 rounded bg-gray-50;
-  }
+/* The interactive element in the cell.  */
+.nonogram .button-cell {
+  display: block;
+  height: 1.75rem;
+  width: 1.75rem;
+  border-radius: 0.25rem;
+  background-color: #f9fafb;
+}
 
-  .nonogram td .button-cell:focus {
-    @apply outline-none ring-4 ring-red-500 z-10 relative;
-  }
+.nonogram td .button-cell:focus {
+  position: relative;
+  z-index: 10;
 
-  .nonogram td .button-cell[aria-pressed="true"] {
-    @apply bg-gray-900;
-  }
+  outline: 2px solid transparent;
+
+  --offset-shadow: 2px 0 0 2px blue;
+  --ring-shadow: 2px 0 0 2px#ef4444;
+  box-shadow: var(--offset-shadow), var(--ring-shadow), var(2px, 0 0 #0000);
+}
+
+.nonogram td .button-cell[aria-pressed="true"] {
+  background-color: rgba(17, 24, 39, var(--tw-bg-opacity));
 }
