@@ -15,10 +15,14 @@ export const Grid = ({
   onBlur,
 }: React.PropsWithChildren<GridProps>) => {
   return (
-    <div className="nonogram">
-      <div role="grid" onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur}>
-        {children}
-      </div>
+    <div
+      className="grid"
+      role="grid"
+      onKeyDown={onKeyDown}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      {children}
     </div>
   );
 };
