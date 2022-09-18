@@ -65,7 +65,7 @@ export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
         <Grid.CornerCell />
         {[...Array(width)].map((_ignored, columnIndex) => {
           return (
-            <Grid.Header
+            <Grid.HeaderCell
               key={columnIndex}
               scope="col"
               clues={clues.column[columnIndex]}
@@ -78,7 +78,7 @@ export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
         return (
           <Grid.Row key={rowIndex}>
             {/* The cell rows will contain their own header */}
-            <Grid.Header
+            <Grid.HeaderCell
               scope="row"
               clues={clues.row[rowIndex]}
               testId={`rowheader:${rowIndex}`}

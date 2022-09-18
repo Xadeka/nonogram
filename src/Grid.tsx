@@ -1,5 +1,6 @@
 import React from "react";
-import "./Grid.css";
+// import "./Grid.css";
+import "./Grid2.css";
 
 interface GridProps {
   onKeyDown?: React.KeyboardEventHandler;
@@ -14,20 +15,16 @@ export const Grid = ({
   onBlur,
 }: React.PropsWithChildren<GridProps>) => {
   return (
-    <table
-      role="grid"
-      className="nonogram"
-      onKeyDown={onKeyDown}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    >
-      <tbody>{children}</tbody>
-    </table>
+    <div className="nonogram">
+      <div role="grid" onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur}>
+        {children}
+      </div>
+    </div>
   );
 };
 
 const GridRow = ({ children }: React.PropsWithChildren<{}>) => {
-  return <tr role="row">{children}</tr>;
+  return <div role="row">{children}</div>;
 };
 Grid.Row = GridRow;
 (Grid.Row as React.FunctionComponent).displayName = "Grid.Row";
@@ -44,10 +41,9 @@ const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
   let pressed = value === "filled";
 
   return (
-    <td role="gridcell">
+    <div role="gridcell">
       <button
         id={id}
-        className="button-cell"
         onClick={onClick}
         tabIndex={tabIndex}
         // The button pressed state will represent "filled".
@@ -63,7 +59,7 @@ const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
          */}
         <span className="sr-only">TODO</span>
       </button>
-    </td>
+    </div>
   );
 };
 Grid.Cell = GridCell;
@@ -75,16 +71,16 @@ interface GridHeaderProps {
   testId: string;
 }
 
-const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
+const GridHeaderCell = ({ scope, clues, testId }: GridHeaderProps) => {
   let label = clues.join(" ");
   if (label.length === 0) {
     label = "0";
   }
 
   return (
-    <th
-      scope={scope}
+    <div
       className="clues-header"
+      data-scope={scope}
       data-testid={testId}
       // I intended this to be read by the screen reader.
       // VoiceOver currently reads row headers but not columns.
@@ -98,15 +94,15 @@ const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
         })}
         {clues.length === 0 ? <li>0</li> : null}
       </ol>
-    </th>
+    </div>
   );
 };
-Grid.Header = GridHeader;
-(Grid.Header as React.FunctionComponent).displayName = "Grid.Header";
+Grid.HeaderCell = GridHeaderCell;
+(Grid.HeaderCell as React.FunctionComponent).displayName = "Grid.HeaderCell";
 
 const GridCornerCell = () => {
   // TODO: This possibly needs to be a th?
-  return <td></td>;
+  return <div></div>;
 };
 Grid.CornerCell = GridCornerCell;
 (Grid.CornerCell as React.FunctionComponent).displayName = "Grid.CornerCell";
