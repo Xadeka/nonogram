@@ -1,8 +1,61 @@
+/* Grid */
 div[role="grid"].grid {
+  --gap: 0.125em;
+
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--gap);
 }
 
 .grid div[role="row"] {
+  width: 100%;
+
+  display: flex;
+  gap: var(--gap);
+  justify-content: flex-end;
 }
 
+/* Clues */
+.grid ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+}
+
+.grid .header-cell[data-scope="col"] {
+  width: 1em;
+}
+
+.grid .header-cell[data-scope="col"] ol {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.grid .header-cell[data-scope="row"] ol {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+/* Cell */
 .grid div[role="gridcell"] {
+  display: inline;
+  width: 1em;
+  aspect-ratio: 1;
+  line-height: 0;
+}
+
+.grid div[role="gridcell"] button {
+  height: 100%;
+  width: 100%;
+}
+
+.grid [aria-pressed="true"] {
+  background-color: red;
 }

@@ -62,7 +62,7 @@ export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
     <Grid onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur}>
       {/* Column headers go in their own row */}
       <Grid.Row>
-        <Grid.EmptyCell />
+        <div />
         {[...Array(width)].map((_ignored, columnIndex) => {
           return (
             <Grid.HeaderCell

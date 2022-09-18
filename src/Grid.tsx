@@ -83,7 +83,7 @@ const HeaderCell = ({ scope, clues, testId }: HeaderCellProps) => {
 
   return (
     <div
-      className="clues-header"
+      className="header-cell"
       data-scope={scope}
       data-testid={testId}
       // I intended this to be read by the screen reader.
@@ -103,9 +103,3 @@ const HeaderCell = ({ scope, clues, testId }: HeaderCellProps) => {
 };
 Grid.HeaderCell = HeaderCell;
 (Grid.HeaderCell as React.FunctionComponent).displayName = "Grid.HeaderCell";
-
-const EmptyCell = () => {
-  return <div></div>;
-};
-Grid.EmptyCell = EmptyCell;
-(Grid.EmptyCell as React.FunctionComponent).displayName = "Grid.EmptyCell";
