@@ -23,13 +23,13 @@ export const Grid = ({
   );
 };
 
-const GridRow = ({ children }: React.PropsWithChildren<{}>) => {
+const Row = ({ children }: React.PropsWithChildren<{}>) => {
   return <div role="row">{children}</div>;
 };
-Grid.Row = GridRow;
+Grid.Row = Row;
 (Grid.Row as React.FunctionComponent).displayName = "Grid.Row";
 
-interface GridCellProps {
+interface CellProps {
   id: string;
   value: CellValue;
   tabIndex: number;
@@ -37,7 +37,7 @@ interface GridCellProps {
   testId: string;
 }
 
-const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
+const Cell = ({ id, value, tabIndex, onClick, testId }: CellProps) => {
   let pressed = value === "filled";
 
   return (
@@ -62,16 +62,16 @@ const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
     </div>
   );
 };
-Grid.Cell = GridCell;
+Grid.Cell = Cell;
 (Grid.Cell as React.FunctionComponent).displayName = "Grid.Cell";
 
-interface GridHeaderProps {
+interface HeaderCellProps {
   scope: "row" | "col";
   clues: number[]; // TODO: Type this better.
   testId: string;
 }
 
-const GridHeaderCell = ({ scope, clues, testId }: GridHeaderProps) => {
+const HeaderCell = ({ scope, clues, testId }: HeaderCellProps) => {
   let label = clues.join(" ");
   if (label.length === 0) {
     label = "0";
@@ -97,12 +97,11 @@ const GridHeaderCell = ({ scope, clues, testId }: GridHeaderProps) => {
     </div>
   );
 };
-Grid.HeaderCell = GridHeaderCell;
+Grid.HeaderCell = HeaderCell;
 (Grid.HeaderCell as React.FunctionComponent).displayName = "Grid.HeaderCell";
 
-const GridCornerCell = () => {
-  // TODO: This possibly needs to be a th?
+const EmptyCell = () => {
   return <div></div>;
 };
-Grid.CornerCell = GridCornerCell;
-(Grid.CornerCell as React.FunctionComponent).displayName = "Grid.CornerCell";
+Grid.EmptyCell = EmptyCell;
+(Grid.EmptyCell as React.FunctionComponent).displayName = "Grid.EmptyCell";
