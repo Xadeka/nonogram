@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useGrid } from "./useGrid";
+import { useGrid } from "../hooks/useGrid";
 import { Grid } from "./Grid";
-import { createBoardState, getCellTestId } from "./utils";
+import { createBoardState, getCellTestId } from "@/utils/board";
 
 const getCellId = ({ row, column }: GridPosition) => `cell-${row}-${column}`;
 
@@ -20,18 +20,13 @@ interface BoardProps {
 export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
   let height = clues.row.length;
   let width = clues.column.length;
-  const {
-    focusedPosition,
-    setFocusedPosition,
-    onKeyDown,
-    onFocus,
-    onBlur,
-  } = useGrid({
-    height,
-    width,
-    getCellId,
-    config: controlsConfig,
-  });
+  const { focusedPosition, setFocusedPosition, onKeyDown, onFocus, onBlur } =
+    useGrid({
+      height,
+      width,
+      getCellId,
+      config: controlsConfig,
+    });
   const [boardState, setBoardState] = useState<BoardState>(
     initialState ?? createBoardState(height, width)
   );

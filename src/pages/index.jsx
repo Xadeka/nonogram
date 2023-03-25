@@ -1,5 +1,5 @@
-import { Board } from "./Board";
-import { createBoardState } from "./utils";
+import { Board } from "@/components/Board";
+import { createBoardState } from "@/utils/board";
 
 // This is temporary.
 let height = 5;
@@ -16,7 +16,7 @@ let clues = {
   column: [[], [1], [1, 1], [2], []],
 };
 
-function App() {
+export default function App() {
   return (
     // Temporary container to center the grid.
     <main className="flex justify-center p-5">
@@ -33,5 +33,3 @@ function App() {
     </main>
   );
 }
-
-export default App;

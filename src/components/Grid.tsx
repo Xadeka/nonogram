@@ -1,5 +1,5 @@
 import React from "react";
-import "./Grid.css";
+import styles from "./Grid.module.css";
 
 interface GridProps {
   onKeyDown?: React.KeyboardEventHandler;
@@ -16,7 +16,7 @@ export const Grid = ({
   return (
     <table
       role="grid"
-      className="nonogram"
+      className={styles.nonogram}
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -47,7 +47,7 @@ const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
     <td role="gridcell">
       <button
         id={id}
-        className="button-cell"
+        className={styles["button-cell"]}
         onClick={onClick}
         tabIndex={tabIndex}
         // The button pressed state will represent "filled".
@@ -84,7 +84,7 @@ const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
   return (
     <th
       scope={scope}
-      className="clues-header"
+      className={styles["clues-header"]}
       data-testid={testId}
       // I intended this to be read by the screen reader.
       // VoiceOver currently reads row headers but not columns.
