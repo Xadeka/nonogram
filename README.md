@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# Nonogram
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b557079b-14e6-4ad8-9f66-5a383297079d/deploy-status)](https://app.netlify.com/sites/not-picross/deploys)
+
+https://nonogram.zade.dev/
 
 ## Available Scripts
 
