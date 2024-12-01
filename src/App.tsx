@@ -4,12 +4,12 @@ import { createBoardState } from "./utils";
 // This is temporary.
 let height = 5;
 let width = 5;
-let intialGridState = createBoardState(height, width);
-intialGridState[1][2] = "filled";
-intialGridState[2][3] = "filled";
-intialGridState[3][1] = "filled";
-intialGridState[3][2] = "filled";
-intialGridState[3][3] = "filled";
+let initialGridState = createBoardState(height, width);
+initialGridState[1][2] = "filled";
+initialGridState[2][3] = "filled";
+initialGridState[3][1] = "filled";
+initialGridState[3][2] = "filled";
+initialGridState[3][3] = "filled";
 
 let clues = {
   row: [[], [1], [1], [3], []],
@@ -22,7 +22,7 @@ function App() {
     <main className="flex justify-center p-5">
       <Board
         clues={clues}
-        initialState={intialGridState}
+        initialState={initialGridState}
         controlsConfig={{
           up: "w",
           left: "a",

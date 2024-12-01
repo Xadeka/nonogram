@@ -129,7 +129,7 @@ test("Display clues in the headers", () => {
     column: [[1, 1], [], [4]],
   });
 
-  // TODO: Is aria-label sufficent?
+  // TODO: Is aria-label sufficient?
   expect(getHeader(0, "row")).toHaveAttribute("aria-label", "3");
   expect(getHeader(1, "row")).toHaveAttribute("aria-label", "1 2 3");
   expect(getHeader(0, "column")).toHaveAttribute("aria-label", "1 1");
