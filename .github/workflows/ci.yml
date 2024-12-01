@@ -11,6 +11,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/setup
       - name: Prettier
         run: npm run lint:prettier
@@ -20,6 +21,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/setup
       - name: Run tests
         run: npm run test
