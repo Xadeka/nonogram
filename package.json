@@ -12,8 +12,8 @@
     "test:watch": "vitest",
     "lint:eslint": "eslint",
     "lint:eslint:fix": "eslint --fix",
-    "typecheck": "tsc --noEmit",
-    "prettier": "prettier --ignore-unknown --write ."
+    "lint:prettier:fix": "prettier --write .",
+    "lint:prettier": "prettier --check ."
   },
   "engines": {
     "npm": "10.1.0",
