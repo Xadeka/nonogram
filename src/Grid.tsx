@@ -1,5 +1,4 @@
 import React from "react";
-import "./Grid.css";
 
 interface GridProps {
   onKeyDown?: React.KeyboardEventHandler;

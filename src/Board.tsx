@@ -20,20 +20,15 @@ interface BoardProps {
 export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
   let height = clues.row.length;
   let width = clues.column.length;
-  const {
-    focusedPosition,
-    setFocusedPosition,
-    onKeyDown,
-    onFocus,
-    onBlur,
-  } = useGrid({
-    height,
-    width,
-    getCellId,
-    config: controlsConfig,
-  });
+  const { focusedPosition, setFocusedPosition, onKeyDown, onFocus, onBlur } =
+    useGrid({
+      height,
+      width,
+      getCellId,
+      config: controlsConfig,
+    });
   const [boardState, setBoardState] = useState<BoardState>(
-    initialState ?? createBoardState(height, width)
+    initialState ?? createBoardState(height, width),
   );
 
   // This handles interaction with the cell/button.
@@ -93,7 +88,7 @@ export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
                   key={columnIndex}
                   id={cellId}
                   value={cellValue}
-                  onClick={(e) => onCellClick(cellPosition, cellValue)}
+                  onClick={(_e) => onCellClick(cellPosition, cellValue)}
                   // tabIndex is determined by what cell is currently focused.
                   // The focused cell will have 1 while all others will have -1.
                   // Reference: https://www.w3.org/TR/wai-aria-practices/#kbd_roving_tabindex

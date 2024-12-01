@@ -69,7 +69,7 @@ export function useGrid<T extends HTMLElement>({
     };
 
     // Update row and column to their next value.
-    // Default to their current postiion.
+    // Default to their current position.
     let row = focusedPosition.row;
     let column = focusedPosition.column;
 
@@ -100,7 +100,7 @@ export function useGrid<T extends HTMLElement>({
     onKeyDown: gridHasFocus
       ? (e: React.KeyboardEvent<T>) => handleNavigationKeyDown(e.key)
       : undefined,
-    onFocus: (e: React.FocusEvent<T>) => setGridHasFocus(true),
-    onBlur: (e: React.FocusEvent<T>) => setGridHasFocus(false),
+    onFocus: (_e: React.FocusEvent<T>) => setGridHasFocus(true),
+    onBlur: (_e: React.FocusEvent<T>) => setGridHasFocus(false),
   };
 }
