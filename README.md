@@ -26,7 +26,7 @@ Launches the test runner in the interactive watch mode.
 ### `npm run test:ui`
 
 Launches the test runner in the interactive watch mode and Vitest's UI.\
-Open [http://localhost:51204/__vitest__/](http://localhost:51204/__vitest__/) to view it in the browser.
+Open [http://localhost:51204/\_\_vitest\_\_/](http://localhost:51204/__vitest__/) to view it in the browser.
 
 ### `npm run build`
 
