@@ -1,3 +1,4 @@
+import { expect, test, afterEach } from "vitest";
 import { render, cleanup, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Board } from "./Board";
@@ -102,7 +103,7 @@ test("Configurable keyboard navigation", () => {
       left: "a",
       down: "s",
       right: "d",
-    }
+    },
   );
 
   userEvent.click(getCell({ row: 2, column: 2 }));

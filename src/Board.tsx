@@ -20,20 +20,15 @@ interface BoardProps {
 export const Board = ({ clues, initialState, controlsConfig }: BoardProps) => {
   let height = clues.row.length;
   let width = clues.column.length;
-  const {
-    focusedPosition,
-    setFocusedPosition,
-    onKeyDown,
-    onFocus,
-    onBlur,
-  } = useGrid({
-    height,
-    width,
-    getCellId,
-    config: controlsConfig,
-  });
+  const { focusedPosition, setFocusedPosition, onKeyDown, onFocus, onBlur } =
+    useGrid({
+      height,
+      width,
+      getCellId,
+      config: controlsConfig,
+    });
   const [boardState, setBoardState] = useState<BoardState>(
-    initialState ?? createBoardState(height, width)
+    initialState ?? createBoardState(height, width),
   );
 
   // This handles interaction with the cell/button.
