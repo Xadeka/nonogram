@@ -25,7 +25,7 @@ export const Grid = ({
   );
 };
 
-const GridRow = ({ children }: React.PropsWithChildren<{}>) => {
+const GridRow = ({ children }: React.PropsWithChildren) => {
   return <tr role="row">{children}</tr>;
 };
 Grid.Row = GridRow;

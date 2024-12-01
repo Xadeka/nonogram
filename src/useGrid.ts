@@ -100,7 +100,7 @@ export function useGrid<T extends HTMLElement>({
     onKeyDown: gridHasFocus
       ? (e: React.KeyboardEvent<T>) => handleNavigationKeyDown(e.key)
       : undefined,
-    onFocus: (_e: React.FocusEvent<T>) => setGridHasFocus(true),
-    onBlur: (_e: React.FocusEvent<T>) => setGridHasFocus(false),
+    onFocus: () => setGridHasFocus(true),
+    onBlur: () => setGridHasFocus(false),
   };
 }
