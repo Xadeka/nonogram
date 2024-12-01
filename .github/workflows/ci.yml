@@ -24,7 +24,7 @@ jobs:
       - name: Prettier
         run: npm lint:prettier
       - name: ESlint
-        run: npm lint:eslint
+        run: npm run lint:eslint
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -40,4 +40,4 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm test
+        run: npm run test
