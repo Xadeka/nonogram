@@ -6,12 +6,8 @@ interface GridProps {
   onBlur?: React.FocusEventHandler;
 }
 
-export const Grid = ({
-  children,
-  onKeyDown,
-  onFocus,
-  onBlur,
-}: React.PropsWithChildren<GridProps>) => {
+export const Grid = (props: React.PropsWithChildren<GridProps>) => {
+  const { children, onBlur, onFocus, onKeyDown } = props;
   return (
     <table
       role="grid"
@@ -25,7 +21,8 @@ export const Grid = ({
   );
 };
 
-const GridRow = ({ children }: React.PropsWithChildren) => {
+const GridRow = (props: React.PropsWithChildren) => {
+  const { children } = props;
   return <tr role="row">{children}</tr>;
 };
 Grid.Row = GridRow;
@@ -39,7 +36,9 @@ interface GridCellProps {
   testId: string;
 }
 
-const GridCell = ({ id, value, tabIndex, onClick, testId }: GridCellProps) => {
+const GridCell = (props: GridCellProps) => {
+  const { tabIndex, value, testId, onClick, id } = props;
+
   let pressed = value === "filled";
 
   return (
@@ -74,7 +73,9 @@ interface GridHeaderProps {
   testId: string;
 }
 
-const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
+const GridHeader = (props: GridHeaderProps) => {
+  const { scope, testId, clues } = props;
+
   let label = clues.join(" ");
   if (label.length === 0) {
     label = "0";
