@@ -91,7 +91,7 @@ const GridHeader = ({ scope, clues, testId }: GridHeaderProps) => {
       // Possibly consider adding a label with sr-only?
       aria-label={label}
     >
-      <ol className="font-normal font-mono">
+      <ol className="font-mono font-normal">
         {clues.map((clue, clueIndex) => {
           return (
             <li key={clueIndex} className="text-gray-900">

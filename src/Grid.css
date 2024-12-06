@@ -6,7 +6,7 @@
 
   .clues-header[scope="row"] ol {
     /* Display the list inline and align it to the right. */
-    @apply flex gap-2 justify-end;
+    @apply flex justify-end gap-2;
   }
 
   .clues-header[scope="col"] {
@@ -23,7 +23,7 @@
          */
   /* The gridcell containing the button. */
   .nonogram td[role="gridcell"] {
-    @apply p-0.5 bg-gray-300;
+    @apply bg-gray-300 p-0.5;
   }
 
   .nonogram tr:nth-child(2) td[role="gridcell"] {
@@ -65,7 +65,7 @@
   }
 
   .nonogram td .button-cell:focus {
-    @apply outline-none ring-4 ring-red-500 z-10 relative;
+    @apply relative z-10 outline-none ring-4 ring-red-500;
   }
 
   .nonogram td .button-cell[aria-pressed="true"] {
