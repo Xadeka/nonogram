@@ -23,7 +23,11 @@ export const Grid = (props: React.PropsWithChildren<GridProps>) => {
 
 const GridRow = (props: React.PropsWithChildren) => {
   const { children } = props;
-  return <tr role="row">{children}</tr>;
+  return (
+    <tr role="row" className="group/row">
+      {children}
+    </tr>
+  );
 };
 Grid.Row = GridRow;
 (Grid.Row as React.FunctionComponent).displayName = "Grid.Row";
@@ -42,10 +46,13 @@ const GridCell = (props: GridCellProps) => {
   let pressed = value === "filled";
 
   return (
-    <td role="gridcell">
+    <td
+      role="gridcell"
+      className="bg-gray-300 p-0.5 last:pr-1 first-of-type:pl-1 group-last/row:pb-1 group-last/row:last:rounded-br-md group-last/row:first-of-type:rounded-bl-md group-[&:nth-child(2)]/row:pt-1 group-[&:nth-child(2)]/row:last:rounded-tr-md group-[&:nth-child(2)]/row:first-of-type:rounded-tl-md"
+    >
       <button
         id={id}
-        className="button-cell"
+        className="block h-7 w-7 rounded bg-gray-50 focus:relative focus:z-10 focus:outline-none focus:ring-4 focus:ring-red-500 aria-pressed:bg-gray-900"
         onClick={onClick}
         tabIndex={tabIndex}
         // The button pressed state will represent "filled".
@@ -84,7 +91,7 @@ const GridHeader = (props: GridHeaderProps) => {
   return (
     <th
       scope={scope}
-      className="clues-header"
+      className="group/th [&[scope=col]]:align-bottom [&[scope=row]]:pr-2"
       data-testid={testId}
       // I intended this to be read by the screen reader.
       // VoiceOver currently reads row headers but not columns.
@@ -92,7 +99,7 @@ const GridHeader = (props: GridHeaderProps) => {
       // Possibly consider adding a label with sr-only?
       aria-label={label}
     >
-      <ol className="font-mono font-normal">
+      <ol className="font-mono font-normal group-[&[scope=row]]/th:flex group-[&[scope=row]]/th:justify-end group-[&[scope=row]]/th:gap-2">
         {clues.map((clue, clueIndex) => {
           return (
             <li key={clueIndex} className="text-gray-900">
